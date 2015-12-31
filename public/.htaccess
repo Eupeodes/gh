@@ -1,0 +1,15 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f [or]
+RewriteCond %{REQUEST_FILENAME} ^(.*)\.php$
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !proxy.php$
+RewriteRule ^(.+)$ proxy.php?url=$1 [QSA]
+
+# 480 weeks
+<FilesMatch "\.png$">
+Header set Cache-Control "max-age=290304000, public"
+</FilesMatch>
+
+<FilesMatch "(css.css|js.js)$">
+Header set Cache-Control "max-age=290304000, public"
+</FilesMatch>

@@ -1,0 +1,28 @@
+<?php
+
+/*
+ * file:		proxy.php
+ * author:		Marten Tacoma
+ * contents:	wrapper for all php files
+ */
+
+ini_set('display_errors', 'on');
+
+spl_autoload_register(
+	function($className){
+		require_once(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT').'/../'.str_replace('\\', '/', $className).'.php');
+	}
+);
+
+$url = filter_input(INPUT_GET, 'url');
+$cutpoint = strpos($url, '/');
+$file = ($cutpoint === false) ? $url : substr($url, 0, strpos($url, '/'));
+$file .= substr($file, -4) === '.php' ? '' : '.php';
+$version = 1.9;
+if(file_exists($file)){
+	require($file);
+} elseif(preg_match('/('.\lib\RegExp::date().'|'.\lib\RegExp::graticule().'|'.\lib\RegExp::hash().'|'. \lib\RegExp::zoom().')/i', filter_input(INPUT_GET, 'url')) || in_array(filter_input(INPUT_GET, 'url'), array('s', 'single'))){
+	require('index.php');
+} else {
+	\lib\Error::send(404, 'The page \''.$url.'\' could not be found');
+}
