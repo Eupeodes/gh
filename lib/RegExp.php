@@ -27,6 +27,13 @@ class RegExp {
 			. ')';
 	}
 	
+	public static function parseDate($matches){
+		$y = strlen($matches['y']) > 0 ? $matches['y'] : $matches['y2'];
+		$m = strlen($matches['m']) > 0 ? $matches['m'] : $matches['m2'];
+		$d = strlen($matches['d']) > 0 ? $matches['d'] : $matches['d2'];
+		return array($y,$m,$d);
+	}
+	
 	public static function ext($optional = false){
 		return '([.](?P<ext>[a-z]+))' . ($optional ? '?' : '');
 	}
@@ -34,8 +41,6 @@ class RegExp {
 	public static function zoom(){
 		return 'z(?P<zoom>[0|1]?[0-9])';
 	}
-	
-	
 	
 	public static function graticule(){
 		$m90 = '[0-8]?[0-9]';
@@ -68,5 +73,9 @@ class RegExp {
 	
 	public static function hash(){
 		return '([0123456789bcdefghjkmnpqrstuvwxyz]{4,})';
+	}
+	
+	public static function partExists($part, $matches){
+		return (array_key_exists($part, $matches) && strlen($matches[$part]) > 0);
 	}
 }

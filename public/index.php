@@ -12,50 +12,78 @@ $center = '[0,0]';
 $single = false;
 $zoom = 8;
 
-$params = array('date', 'lat', 'lng', 'lon'=>'lng', 'multi', 'zoom');
-foreach($params as $key=>$param){
-	$key = is_numeric($key) ? $param : $key;
-	if(array_key_exists($key, filter_input_array(INPUT_GET))){
+$set = false;
+$params = array('date', 'lng', 'lon', 'multi', 'zoom');
+foreach($params as $param){
+	if(array_key_exists($param, filter_input_array(INPUT_GET))){
 		switch($param){
 			case 'multi':
 				$single = filter_input(INPUT_GET, 'multi') !== 'false';
 				break;
+			case 'lng':
+				$center = '['.filter_input(INPUT_GET, 'lng').','.filter_input(INPUT_GET, 'lat').']';
+				break;
+			case 'lon':
+				$center = '['.filter_input(INPUT_GET, 'lon').','.filter_input(INPUT_GET, 'lat').']';
+				break;
 			default:
-				$$param = filter_input(INPUT_GET, $key);
+				$$param = filter_input(INPUT_GET, $param);
+		}
+		$set = true;
+	}
+}
+if(!$set){
+	if(preg_match('/^(?P<type>(map|sat|hyb|ter)\/)?(?P<date>'.\lib\RegExp::date().'(\/(?P<single>s(ingle)?))?(\/(?P<hash>'.\lib\RegExp::hash().')(\/(?P<zoom>[[0|1]?[0-9])(\/(?P<center>'.\lib\RegExp::hash().'))?)?)?)?$/i', filter_input(INPUT_GET, 'url'), $matches)){
+		if(array_key_exists('debug', $_GET)){
+			var_dump($matches);die();
+		}
+		
+		if(\lib\RegExp::partExists('date', $matches)){
+			\lib\RegExp::parseDate($matches);
+			list($y,$m,$d) = \lib\RegExp::parseDate($matches);
+			if(checkdate($m,$d,$y) && $y.'-'.$m.'-'.$d <= $maxDate){
+				$date = $y.'-'.$m.'-'.$d;
+			}
+		}
+		if(\lib\RegExp::partExists('hash', $matches)){
+			$geohash = new \lib\external\GeoHash();
+			list($lat, $lng) = $geohash->decode($matches['hash']);
+			$center = '['.$lng.', '.$lat.']';
+		}
+		if(\lib\RegExp::partExists('zoom', $matches)){
+			$zoom = $matches['zoom'];
+		}
+		if(\lib\RegExp::partExists('single', $matches)){
+			$single = true;
+		}
+		//type and center are currently not being used
+	} else {
+		if(preg_match('/(\/|^)'. \lib\RegExp::date().'(\/|$)/i', filter_input(INPUT_GET, 'url'), $matches)){
+			list($y,$m,$d) = \lib\RegExp::parseDate($matches);
+			if(checkdate($m,$d,$y) && $y.'-'.$m.'-'.$d <= $maxDate){
+				$date = $y.'-'.$m.'-'.$d;
+			}
+		}
+
+		if(preg_match('/(\/|^)(?P<graticule>'.\lib\RegExp::graticule().')(\/|$)/i', filter_input(INPUT_GET, 'url'), $matches)){
+			if($matches['graticule'] === 'global'){
+				$hash = new \view\Hash($date);
+				$center = '['.$hash->getInt($hash->output['global']->lng).'.5,'.$hash->getInt($hash->output['global']->lat).'.5]';
+			} else {
+				list($lat, $lng) = \lib\RegExp::parseGraticule($matches);
+				$center = '['.$lng.'.5, '.$lat.'.5]';
+			}
+		}
+
+		if(preg_match('/(\/|^)s(ingle)?(\/|$)/i', filter_input(INPUT_GET, 'url'), $matches)){
+			$single = true;
+		}
+
+		if(preg_match('/(\/|^)'.\lib\RegExp::zoom().'(\/|$)/i', filter_input(INPUT_GET, 'url'), $matches)){
+			$zoom = $matches['zoom'];
 		}
 	}
-}	
-if(preg_match('/(\/|^)'. \lib\RegExp::date().'(\/|$)/i', filter_input(INPUT_GET, 'url'), $matches)){
-	$y = strlen($matches['y']) > 0 ? $matches['y'] : $matches['y2'];
-	$m = strlen($matches['m']) > 0 ? $matches['m'] : $matches['m2'];
-	$d = strlen($matches['d']) > 0 ? $matches['d'] : $matches['d2'];
-	if(checkdate($m,$d,$y) && $y.'-'.$m.'-'.$d <= $maxDate){
-		$date = $y.'-'.$m.'-'.$d;
-	}
 }
-
-if(preg_match('/(\/|^)(?P<graticule>'.\lib\RegExp::graticule().')(\/|$)/i', filter_input(INPUT_GET, 'url'), $matches)){
-	if($matches['graticule'] === 'global'){
-		$hash = new \view\Hash($date);
-		$center = '['.$hash->getInt($hash->output['global']->lng).'.5,'.$hash->getInt($hash->output['global']->lat).'.5]';
-	} else {
-		list($lat, $lng) = \lib\RegExp::parseGraticule($matches);
-		$center = '['.$lng.'.5, '.$lat.'.5]';
-	}
-} elseif(preg_match('/(\/|^)(?P<hash>'.\lib\RegExp::hash().')(\/|$)/i', filter_input(INPUT_GET, 'url'), $matches)){
-	$geohash = new \lib\external\GeoHash();
-	list($lat, $lng) = $geohash->decode($matches['hash']);
-	$center = '['.$lng.', '.$lat.']';
-}
-
-if(preg_match('/(\/|^)s(ingle)?(\/|$)/i', filter_input(INPUT_GET, 'url'), $matches)){
-	$single = true;
-}
-
-if(preg_match('/(\/|^)'.\lib\RegExp::zoom().'(\/|$)/i', filter_input(INPUT_GET, 'url'), $matches)){
-	$zoom = $matches['zoom'];
-}
-
 
 ?><!doctype html>
 <html>
