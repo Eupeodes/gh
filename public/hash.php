@@ -74,7 +74,7 @@ if(preg_match('/^hash(?P<wk>\/wk)?\/'.\lib\RegExp::date().'(?P<graticule>\/'.\li
 			$n = 0;
 			$int = new \DateInterval('P1D');
 			while(true){
-				$hash = new \view\Hash($dateTime->format('Y-n-d'));
+				$hash = new \view\Hash($dateTime->format('Y-m-d'));
 				if(is_null($hash->output['east'])){
 					break;
 				}

@@ -10,9 +10,9 @@ class Hash {
 		
 	public function __construct($date) {
 		$this->calc($date);
-		
+		$dateTime = new \DateTime($date);
 		$this->output = array(
-			'date' => $date,
+			'date' => $dateTime->format('Y-m-d'),
 			'west' => $this->west,
 			'east' => $this->east,
 			'global' => $this->global
