@@ -8,9 +8,7 @@
  * TODO:
  * create popups like http://openlayers.org/en/v3.12.1/examples/popup.html
  */
-var map, view, settings, ol, xs,xt,xl, ys,yt,yl, gridLayer, gridVector, geolocation, mapLayer;
-var markerLayers = [];
-var content, closer, overlay;
+var map, view, settings, ol, xs,xt,xl, ys,yt,yl, gridLayer, gridVector, geolocation, mapLayer, markerLayers = [], content, closer, overlay;
 
 //insert li at the right alphabetical place in an ul
 function addLiAlpha(ul, li){
@@ -94,13 +92,13 @@ var zoom = {
         map.beforeRender(animation);
         view.setZoom(value);
 	},
-	to: function(lat,lng){
+	to: function(lat,lng,lvl){
 		var animation = ol.animation.zoom({
             duration: 200,
             resolution: view.getResolution()
         });
         map.beforeRender(animation);
-		view.setZoom(15);
+		view.setZoom(lvl);
 		zoom.setCenter(ol.proj.transform([lng,lat], 'EPSG:4326', 'EPSG:3857'));
 	},
 	setCenter: function(point){
@@ -135,6 +133,9 @@ var home = {
 			})
 		});
 		map.addLayer(home.layer);
+		if(view.getZoom() === 2){
+			zoom.to(point[1],point[0],settings.zoom);
+		}
 	},
 	distance: function(location){
 		var wgs84Sphere = new ol.Sphere(6378137);
@@ -352,7 +353,7 @@ popover = {
 			var id = this.feature.get('date') + '_' + y + '_' + x;
 		}
 		content.html('<strong>'+name+'</strong> <button onclick="window.open(&quot;http://wiki.xkcd.com/geohashing/'+id+'&quot;)">Meetup</button><br />'+
-			this.lat.toFixed(8) + ', ' + this.lng.toFixed(8) + ' <button onclick="zoom.to('+this.lat+','+this.lng+')">Zoom in</button><br />' +
+			this.lat.toFixed(8) + ', ' + this.lng.toFixed(8) + ' <button onclick="zoom.to('+this.lat+','+this.lng+', 15)">Zoom in</button><br />' +
 			'<span id="geoName"><span style="color:silver;font-style:italic">[A location name should appear here]</span></span><br/>' +
 			home.distance(this.coordinates) + '<br/>' +
 			'<button onclick="window.open(&quot;/hash/' + this.feature.get('date').split('-').join('/') + '/' + grat + '.gpx&quot;)">GPX</button> <button onclick="window.open(&quot;http://geo.crox.net/poster/'+id+'&quot;)">Poster</button> <button onclick="window.open(&quot;http://www.geocaching.com/seek/nearest.aspx?origin_lat='+this.lat+'&amp;origin_long='+this.lng+'&quot;)">Nearby geocaches</button>'
@@ -377,11 +378,11 @@ loadmap = function(){
 		return false;
 	});
 	
-	
+	var defaultZoom = (settings.center != '0,0') ? settings.zoom : 2;
 	view = new ol.View({
         center: ol.proj.transform(settings.center, 'EPSG:4326', 'EPSG:3857'),
         minZoom: settings.minZoom,
-        zoom: settings.zoom,
+        zoom: defaultZoom,
         maxZoom: settings.maxZoom,
         rotation: 0
     });
@@ -547,6 +548,4 @@ $(function() {
 		marker.init();
 		marker.get();
 	}
-	
-	
 });
