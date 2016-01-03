@@ -15,10 +15,14 @@ spl_autoload_register(
 );
 
 $url = filter_input(INPUT_GET, 'url');
-$cutpoint = strpos($url, '/');
-$file = ($cutpoint === false) ? $url : substr($url, 0, strpos($url, '/'));
-$file .= substr($file, -4) === '.php' ? '' : '.php';
-$version = 1.9;
+if(substr($url, -4) === '.php'){
+	$file = $url;
+} else {
+	$cutpoint = strpos($url, '/');
+	$file = ($cutpoint === false) ? $url : substr($url, 0, strpos($url, '/'));
+	$file .= '.php';
+}
+
 if(file_exists($file)){
 	require($file);
 } elseif(preg_match('/('.\lib\RegExp::date().'|'.\lib\RegExp::mapType().'|'.\lib\RegExp::graticule().'|'.\lib\RegExp::hash().'|'. \lib\RegExp::zoom().')/i', filter_input(INPUT_GET, 'url')) || in_array(filter_input(INPUT_GET, 'url'), array('s', 'single'))){

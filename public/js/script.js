@@ -8,7 +8,8 @@
  * TODO:
  * create popups like http://openlayers.org/en/v3.12.1/examples/popup.html
  */
-var map, view, settings, ol, xs,xt,xl, ys,yt,yl, gridLayer, gridVector, geolocation, mapLayer, markerLayers = [], content, closer, overlay;
+var map, view, settings, ol, xs,xt,xl, ys,yt,yl, gridLayer, gridVector, geolocation, mapLayer, markerLayers = [], content, closer, overlay, days = {0:'Su', 1:'Mo', 2:'Tu', 3:'We', 4:'Th', 5:'Fr', 6:'Sa'};
+
 
 //insert li at the right alphabetical place in an ul
 function addLiAlpha(ul, li){
@@ -240,9 +241,10 @@ var marker = {
 		}
 	},
 	doDraw: function(json){
-		var date = json.date;
-		var day = parseInt(date.substring(8,10));
-		
+		var date = new Date(json.date);
+		var day = $('#dayOfWeek').is(':checked') ? days[date.getDay()] : date.getDate();
+		var bgColor = $('#markerControl .colorPicker.selected').attr('bgcolor');
+		var fgColor = $('#markerControl .colorPicker.selected').attr('fgcolor');
 		s = new ol.source.Vector({});
 		for(var x=0;x<xs.length;x++){
 			if((xs[x] >= 30 & xt[x] === -1 & json.west !== null) || xs[x] < 30 || xt[x] === 1){
@@ -265,10 +267,10 @@ var marker = {
 			source: s,
 			style: new ol.style.Style({
 				image: new ol.style.Icon({
-					anchor: [9,34],
+					anchor: [13,36],
 					anchorXUnits: 'pixels',
 					anchorYUnits: 'pixels',
-					src: '/img/marker/'+day+'.png'
+					src: '/img/marker.php?bg='+bgColor+'&fg='+fgColor+'&text='+day
 				})
 			})
 		}));
@@ -285,10 +287,10 @@ var marker = {
 			source: s,
 			style: new ol.style.Style({
 				image: new ol.style.Icon({
-					anchor: [21,80],
+					anchor: [25,72],
 					anchorXUnits: 'pixels',
 					anchorYUnits: 'pixels',
-					src: '/img/marker/global_'+day+'.png'
+					src: '/img/marker.php?bg='+bgColor+'&fg='+fgColor+'&global&text='+day
 				})
 			})
 		}));
@@ -548,4 +550,14 @@ $(function() {
 		marker.init();
 		marker.get();
 	}
+	$("input[name='dayOf']").change(function(){
+		marker.get(true);
+	});
+	$("#markerControl .colorPicker").click(function(evt){
+		if(!$(evt.target).hasClass('selected')){
+			$("#markerControl .colorPicker").removeClass('selected');
+			$('#'+evt.target.id).addClass('selected');
+			marker.get(true);
+		}
+	});
 });

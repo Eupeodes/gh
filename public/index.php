@@ -12,6 +12,8 @@ $center = '[0,0]';
 $single = false;
 $zoom = 8;
 $type = 'map';
+$dayOf = 'month';//either week or month
+$colorSet = 4;
 
 $set = false;
 $params = array('date', 'lng', 'lon', 'multi', 'zoom', 'type');
@@ -174,6 +176,28 @@ if(!$set){
 			<div class="control" id="mapControl">
 				<div class="title">Map</div>
 				<ul></ul>
+			</div>
+			<div class="control" id="markerControl">
+				<div class="title">Markers</div>
+				<ul>
+					<li><input type="radio" name="dayOf" id="dayOfMonth" <?=$dayOf==='month' ? 'checked' :''?> /><label for="dayOfMonth">Show day of month (1 - 31)</label></li>
+					<li><input type="radio" name="dayOf" id="dayOfWeek" <?=$dayOf==='week' ? 'checked' :''?>/><label for="dayOfWeek">Show day of week (Mo - Su)</label></li>
+				</ul>
+				<div class="content">
+					<?php
+					$colors = [
+						['f00','fff'],
+						['00f','fff'],
+						['060','fff'],
+						['0f0','000'],
+						['0ff','000'],
+						['f0f','fff']
+					];
+					foreach($colors as $key=>$color){
+						echo '<div class="colorPicker'.($colorSet === $key ? ' selected' :'').'" style="background-color:#'.$color[0].';color:#'.$color[1].'" fgcolor="'.$color[1].'" bgcolor="'.$color[0].'"  id="color_'.$key.'">x</div>';
+					}?>
+					<div style="clear:both"></div>
+				</div>
 			</div>
 			<div class="version">Geohashing.info <?=file_get_contents('../version')?> - <?=date('Y-m-d', filemtime('../version'))?></div>
 	</body>
