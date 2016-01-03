@@ -78,4 +78,8 @@ class RegExp {
 	public static function partExists($part, $matches){
 		return (array_key_exists($part, $matches) && strlen($matches[$part]) > 0);
 	}
+	
+	public static function mapType(){
+		return '(map|sat|hyb|ter)';
+	}
 }

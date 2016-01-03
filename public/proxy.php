@@ -21,7 +21,7 @@ $file .= substr($file, -4) === '.php' ? '' : '.php';
 $version = 1.9;
 if(file_exists($file)){
 	require($file);
-} elseif(preg_match('/('.\lib\RegExp::date().'|'.\lib\RegExp::graticule().'|'.\lib\RegExp::hash().'|'. \lib\RegExp::zoom().')/i', filter_input(INPUT_GET, 'url')) || in_array(filter_input(INPUT_GET, 'url'), array('s', 'single'))){
+} elseif(preg_match('/('.\lib\RegExp::date().'|'.\lib\RegExp::mapType().'|'.\lib\RegExp::graticule().'|'.\lib\RegExp::hash().'|'. \lib\RegExp::zoom().')/i', filter_input(INPUT_GET, 'url')) || in_array(filter_input(INPUT_GET, 'url'), array('s', 'single'))){
 	require('index.php');
 } else {
 	\lib\Error::send(404, 'The page \''.$url.'\' could not be found');

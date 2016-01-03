@@ -11,9 +11,10 @@ $date = date('Y-m-d');
 $center = '[0,0]';
 $single = false;
 $zoom = 8;
+$type = 'map';
 
 $set = false;
-$params = array('date', 'lng', 'lon', 'multi', 'zoom');
+$params = array('date', 'lng', 'lon', 'multi', 'zoom', 'type');
 foreach($params as $param){
 	if(array_key_exists($param, filter_input_array(INPUT_GET))){
 		switch($param){
@@ -33,11 +34,10 @@ foreach($params as $param){
 	}
 }
 if(!$set){
-	if(preg_match('/^(?P<type>(map|sat|hyb|ter)\/)?(?P<date>'.\lib\RegExp::date().'(\/(?P<single>s(ingle)?))?(\/(?P<hash>'.\lib\RegExp::hash().')(\/(?P<zoom>[[0|1]?[0-9])(\/(?P<center>'.\lib\RegExp::hash().'))?)?)?)?$/i', filter_input(INPUT_GET, 'url'), $matches)){
-		if(array_key_exists('debug', $_GET)){
-			var_dump($matches);die();
+	if(preg_match('/^(\/)?((?P<type>'.\lib\RegExp::mapType().')\/)?(?P<date>'.\lib\RegExp::date().'(\/(?P<single>s(ingle)?))?(\/(?P<hash>'.\lib\RegExp::hash().')(\/(?P<zoom>[[0|1]?[0-9])(\/(?P<center>'.\lib\RegExp::hash().'))?)?)?)?(\/)?$/i', filter_input(INPUT_GET, 'url'), $matches)){
+		if(\lib\RegExp::partExists('type', $matches)){
+			$type = $matches['type'];
 		}
-		
 		if(\lib\RegExp::partExists('date', $matches)){
 			\lib\RegExp::parseDate($matches);
 			list($y,$m,$d) = \lib\RegExp::parseDate($matches);
@@ -58,13 +58,15 @@ if(!$set){
 		}
 		//type and center are currently not being used
 	} else {
+		if(preg_match('/(\/|^)(?P<type>'. \lib\RegExp::mapType().')(\/|$)/i', filter_input(INPUT_GET, 'url'), $matches)){
+			$type = $matches['type'];
+		}
 		if(preg_match('/(\/|^)'. \lib\RegExp::date().'(\/|$)/i', filter_input(INPUT_GET, 'url'), $matches)){
 			list($y,$m,$d) = \lib\RegExp::parseDate($matches);
 			if(checkdate($m,$d,$y) && $y.'-'.$m.'-'.$d <= $maxDate){
 				$date = $y.'-'.$m.'-'.$d;
 			}
 		}
-
 		if(preg_match('/(\/|^)(?P<graticule>'.\lib\RegExp::graticule().')(\/|$)/i', filter_input(INPUT_GET, 'url'), $matches)){
 			if($matches['graticule'] === 'global'){
 				$hash = new \view\Hash($date);
@@ -112,7 +114,8 @@ if(!$set){
 				minDate: '<?=\model\Date::min()?>',
 				maxDate: '<?=$maxDate?>',
 				refreshMaxDate: '<?=\model\Date::nextCheck($maxDate)?>',
-				controlsVisible: true
+				controlsVisible: true,
+				type: '<?=$type?>'
 			};
 		</script>
 		<?php

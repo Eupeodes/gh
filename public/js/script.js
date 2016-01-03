@@ -405,28 +405,28 @@ loadmap = function(){
 
 	//all available basemaps
     var baseMaps = {
-        'bing_hybrid': {
+        'map': {
+            source: new ol.source.OSM(),
+            name: 'OpenStreetMap'
+        },
+		'hyb': {
             source : new ol.source.BingMaps({
                 key: 'AnPs-A1HdnHQ9YOEsBuVSHJQeDpQTMXaxibqQk4Z3rGIocGm1lp6gdf5qvB5-oxk',
                 imagerySet: 'AerialWithLabels'
             }),
             name: 'Bing maps (Hybrid)'
         },
-        'bing_sat': {
+        'sat': {
             source : new ol.source.BingMaps({
                 key: 'AnPs-A1HdnHQ9YOEsBuVSHJQeDpQTMXaxibqQk4Z3rGIocGm1lp6gdf5qvB5-oxk',
                 imagerySet: 'Aerial'
             }),
             name: 'Bing maps (Satellite)'
-        },
-        'osm': {
-            source: new ol.source.OSM(),
-            name: 'OpenStreetMap'
         }
 	};
 	mapLayer = {
 		list: {},
-		current: 'osm',
+		current: settings.type,
 		register: function(id, layer, name) {
 			this.list[id] = layer;
 			addLiAlpha('#mapControl', '<li onclick="javascript:mapLayer.load(\'' + id + '\')"><input type="radio" name="map" onchange="javascript:mapLayer.load(\'' + id + '\')" id="map_' + id + '" ' + ((this.current === id) ? 'checked="checked"' : '') + '/> <label for="map_' + id + '">' + name + '</label></li>');
