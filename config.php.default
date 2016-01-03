@@ -1,0 +1,23 @@
+<?php
+/* 
+ * copy this file to config.php 
+ * - one level above the document_root (which hides it from the web)
+ * - at the document_root (if level above is not possible)
+ * 
+ * and fill in the details
+ */
+
+class config {
+	public static $keys = [
+		'bing'=>'', //key for bing maps
+		'geonames'=>'' //username for geonames
+	];
+	public static $db = [
+		'type' => '',//mysql or postgresql
+		'host' => '127.0.0.1',
+		'user' => '',//login name
+		'pass' => '',//login password
+		'name' => '',//name of the database
+	];
+
+}

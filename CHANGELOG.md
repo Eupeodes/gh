@@ -1,5 +1,10 @@
 #Changelog
 
+## v2.0.7 - 2016-01-03
+* Separate user config and system config in preparation for storing user confing in a cookie
+* Rename settings.php to config.php, make it object based
+* Minor cosmetic changes (cursor: pointer) on controls
+
 ## v2.0.6 - 2016-01-03
 Replace existing google markers with own markers, more xkcd style
 * Both foreground and background color are customizable

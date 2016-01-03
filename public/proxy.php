@@ -6,8 +6,6 @@
  * contents:	wrapper for all php files
  */
 
-ini_set('display_errors', 'on');
-
 spl_autoload_register(
 	function($className){
 		require_once(filter_input(INPUT_SERVER, 'DOCUMENT_ROOT').'/../'.str_replace('\\', '/', $className).'.php');

@@ -25,14 +25,7 @@ class Db {
 	}
 	
 	private static function createInstance(){
-		$docroot = filter_input(INPUT_SERVER, 'DOCUMENT_ROOT').'/';
-		if(file_exists($docroot.'../settings.php')){
-			require($docroot.'../settings.php');
-		} elseif(file_exists($docroot.'settings.php')){
-			require($docroot.'settings.php');
-		} else {
-			die('No settings file found');
-		}
+		$db = \config::$db;
 		$pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
 		self::$instance = new PDO($db['type'].':host='.$db['host'].';dbname='.$db['name'], $db['user'], $db['pass'], $pdo_options);
 	}

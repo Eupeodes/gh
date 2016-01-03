@@ -79,7 +79,7 @@ var date = {
 };
 
 var zoom = {
-	value: settings.zoom,
+	value: settings.user.zoom,
 	change: function(){
 		zoom.value = $('#inputZoomLevel').val();
 		$('#zoomControl .slider').slider('value', zoom.value);
@@ -108,7 +108,7 @@ var zoom = {
 		view.centerOn(point,size,[((size[0]-sideBar)/2)+sideBar,size[1]/2]);
 	},
 	reset: function(){
-		zoom.doZoom(settings.zoom);
+		zoom.doZoom(settings.user.zoom);
 		zoom.setCenter(ol.proj.transform(home.point, 'EPSG:4326', 'EPSG:3857'));
 	}
 };
@@ -120,6 +120,7 @@ var home = {
 	set: function(point){
 		map.removeLayer(home.layer);
 		home.point = point;
+		settings.user.home = point;
 		home.marker = new ol.source.Vector({});
 		home.marker.addFeature(new ol.Feature({geometry: new ol.geom.Point(ol.proj.transform(point, 'EPSG:4326', 'EPSG:3857'))}));
 		home.layer = new ol.layer.Vector({
@@ -135,7 +136,7 @@ var home = {
 		});
 		map.addLayer(home.layer);
 		if(view.getZoom() === 2){
-			zoom.to(point[1],point[0],settings.zoom);
+			zoom.to(point[1],point[0],settings.user.zoom);
 		}
 	},
 	distance: function(location){
@@ -205,15 +206,15 @@ var marker = {
 		}
 		marker.drawGrid();
 	},
-	get: function(force, newMaxDate){
+	get: function(force, keepPopover){
 		force = typeof force !== 'undefined' ? force : false;
-		newMaxDate = typeof force !== 'undefined' ? newMaxDate : false;
+		keepPopover = typeof keepPopover !== 'undefined' ? keepPopover : false;
 		marker.date = $('#datepicker').val();
 		if(marker.date !== marker.curDate || force){
 			for(var i=0;i<markerLayers.length;i++){
 				map.removeLayer(markerLayers[i]);
 			}
-			if(!newMaxDate){
+			if(!keepPopover){
 				overlay.setPosition(undefined);
 			}
 			markerLayers = [];
@@ -380,12 +381,12 @@ loadmap = function(){
 		return false;
 	});
 	
-	var defaultZoom = (settings.center != '0,0') ? settings.zoom : 2;
+	var defaultZoom = (settings.user.center != '0,0') ? settings.user.zoom : 2;
 	view = new ol.View({
-        center: ol.proj.transform(settings.center, 'EPSG:4326', 'EPSG:3857'),
-        minZoom: settings.minZoom,
+        center: ol.proj.transform(settings.user.center, 'EPSG:4326', 'EPSG:3857'),
+        minZoom: settings.system.minZoom,
         zoom: defaultZoom,
-        maxZoom: settings.maxZoom,
+        maxZoom: settings.system.maxZoom,
         rotation: 0
     });
 	
@@ -393,7 +394,7 @@ loadmap = function(){
 		projection: view.getProjection()
 	});
 	
-	if(settings.center == '0,0'){
+	if(settings.user.center == '0,0'){
 		geolocation.setTracking(true);
 	}
 	
@@ -413,14 +414,14 @@ loadmap = function(){
         },
 		'hyb': {
             source : new ol.source.BingMaps({
-                key: 'AnPs-A1HdnHQ9YOEsBuVSHJQeDpQTMXaxibqQk4Z3rGIocGm1lp6gdf5qvB5-oxk',
+                key: settings.system.bingKey,
                 imagerySet: 'AerialWithLabels'
             }),
             name: 'Bing maps (Hybrid)'
         },
         'sat': {
             source : new ol.source.BingMaps({
-                key: 'AnPs-A1HdnHQ9YOEsBuVSHJQeDpQTMXaxibqQk4Z3rGIocGm1lp6gdf5qvB5-oxk',
+                key: settings.system.bingKey,
                 imagerySet: 'Aerial'
             }),
             name: 'Bing maps (Satellite)'
@@ -428,7 +429,7 @@ loadmap = function(){
 	};
 	mapLayer = {
 		list: {},
-		current: settings.type,
+		current: settings.user.type,
 		register: function(id, layer, name) {
 			this.list[id] = layer;
 			addLiAlpha('#mapControl', '<li onclick="javascript:mapLayer.load(\'' + id + '\')"><input type="radio" name="map" onchange="javascript:mapLayer.load(\'' + id + '\')" id="map_' + id + '" ' + ((this.current === id) ? 'checked="checked"' : '') + '/> <label for="map_' + id + '">' + name + '</label></li>');
@@ -516,10 +517,10 @@ $(function() {
 		showOtherMonths: true,
 		selectOtherMonths: true,
 		firstDay: 1,
-		minDate: settings.minDate,
-		maxDate: settings.maxDate,
+		minDate: settings.system.minDate,
+		maxDate: settings.system.maxDate,
 		altField: '#datepicker',
-		defaultDate: settings.date,
+		defaultDate: settings.system.date,
 		nextText: '&gt;',
 		prevText: '&lt;',
 		hideIfNoPrevNext: true,
@@ -532,32 +533,34 @@ $(function() {
 	$('#inputZoomLevel').change(function(){
 		zoom.change();
 	});
-	$('#inputZoomLevel').val(settings.zoom);
+	$('#inputZoomLevel').val(settings.user.zoom);
 	$('#zoomControl .slider').slider({
-		value: settings.zoom,
-		min: settings.minZoom,
-		max: settings.maxZoom,
+		value: settings.user.zoom,
+		min: settings.system.minZoom,
+		max: settings.system.maxZoom,
 		slide: function(event, ui){
 			$('#inputZoomLevel').val(ui.value);
 			zoom.doZoom(ui.value);
 		}
 	});
-	if($(window).width()>640 & settings.controlsVisible){
+	if($(window).width()>640 & settings.user.controlsVisible){
 		controls.show(0);
 	}
-	if(settings.center != '0,0'){
-		home.set(settings.center);
+	if(settings.user.center != '0,0'){
+		home.set(settings.user.center);
 		marker.init();
 		marker.get();
 	}
 	$("input[name='dayOf']").change(function(){
-		marker.get(true);
+		marker.get(true, true);
 	});
 	$("#markerControl .colorPicker").click(function(evt){
 		if(!$(evt.target).hasClass('selected')){
 			$("#markerControl .colorPicker").removeClass('selected');
 			$('#'+evt.target.id).addClass('selected');
-			marker.get(true);
+			settings.user.colorSet = $('#'+evt.target.id).attr('setid');
+			console.log(settings.user);
+			marker.get(true, true);
 		}
 	});
 });

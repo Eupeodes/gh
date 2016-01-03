@@ -82,6 +82,7 @@ a {
 				color: white;
 				font-weight: bold;
 				font-size: 10pt;
+				cursor: pointer;
 			}
 			button:active {
 				background-color: rgba(0,0,0,0.5);
@@ -98,6 +99,7 @@ a {
 				float: left;
 				margin-right: 5px;
 				border-radius: 3px;
+				cursor: pointer;
 				&.selected {
 					border: solid 3px black;
 					padding: 8px;
@@ -120,9 +122,13 @@ a {
 			padding: 5px;
 			border-top: $border2;
 			display: block;
+			cursor: pointer;
 		}
 		input[type=radio], input[type=checkbox]{
 			display: none;
+		}
+		input+label{
+			cursor: pointer;
 		}
 		input[type=radio]+label{
 			background: url('/img/radio.png') left center no-repeat;

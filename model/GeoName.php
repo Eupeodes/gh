@@ -15,7 +15,7 @@ class GeoName {
 		} elseif($lat > 84){
 			$output = 'North Pole';
 		} else {
-			$xml = simplexml_load_file('http://api.geonames.org/extendedFindNearby?lat='.$lat.'&lng='.$lng.'&username=eupeodes');
+			$xml = simplexml_load_file('http://api.geonames.org/extendedFindNearby?lat='.$lat.'&lng='.$lng.'&username='.\config::$keys['geonames']);
 			$output = '';
 			if(isset($xml->ocean)){
 				$output = $xml->ocean->name;
