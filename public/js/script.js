@@ -243,6 +243,9 @@ var marker = {
 	},
 	doDraw: function(json){
 		var date = new Date(json.date);
+		date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
+		console.log(json.date);
+		console.log(date);
 		var day = $('#dayOfWeek').is(':checked') ? days[date.getDay()] : date.getDate();
 		var bgColor = $('#markerControl .colorPicker.selected').attr('bgcolor');
 		var fgColor = $('#markerControl .colorPicker.selected').attr('fgcolor');
@@ -502,7 +505,7 @@ loadmap = function(){
 	});
 };
 
-$(function() {
+$(window).load(function() {
 	loadmap();
 	$('#showWeek').change(function(){
 		marker.get(true);
