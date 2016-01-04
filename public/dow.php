@@ -4,6 +4,7 @@
  * author:		Marten Tacoma
  * contents:	display one or more dows
  */
+
 if(preg_match('/^dow\/'.\lib\RegExp::date(true,true).\lib\RegExp::ext(true).'$/', filter_input(INPUT_GET, 'url'), $matches)){
 	if(array_key_exists('d', $matches) && is_numeric($matches['d'])){
 		$dt_start = new DateTime($matches['y'].'-'.$matches['m'].'-'.$matches['d']);

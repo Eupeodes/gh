@@ -1,6 +1,6 @@
 <?php
 /*
- * file:		maxDate.php
+ * file:		geoName.php
  * author:		Marten Tacoma
  * contents:	get location name
  */

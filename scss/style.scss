@@ -1,5 +1,5 @@
 /*
- * file:		style.php
+ * file:		style.scss
  * author:		Marten Tacoma
  * contents:	all style information
  */
@@ -167,12 +167,12 @@ a {
 }
 
 #hamburger {
-    cursor: pointer;
-    display: block;
-    height: 24px;
-    padding: 8px;
-    position: relative;
-    width: 25px;
+	cursor: pointer;
+	display: block;
+	height: 24px;
+	padding: 8px;
+	position: relative;
+	width: 25px;
 	float: right;
 	div {
 		background-color: #fff;
@@ -252,17 +252,17 @@ a {
 	}
 	
 	&-popup {
-        position: absolute;
-        background-color: white;
+		position: absolute;
+		background-color: white;
 		color: black;
-        -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-        filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px solid #cccccc;
-        bottom: 44px;
-        left: -50px;
-        min-width: 280px;
+		-webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+		filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+		padding: 15px;
+		border-radius: 10px;
+		border: 1px solid #cccccc;
+		bottom: 44px;
+		left: -50px;
+		min-width: 280px;
 		&.global{
 			bottom: 80px;
 		}

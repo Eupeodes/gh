@@ -1,5 +1,4 @@
 <?php
-
 /*
  * file:		proxy.php
  * author:		Marten Tacoma

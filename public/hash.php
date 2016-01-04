@@ -1,5 +1,4 @@
 <?php
-
 /*
  * file:		hash.php
  * author:		Marten Tacoma

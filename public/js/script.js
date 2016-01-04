@@ -87,18 +87,18 @@ var zoom = {
 	},
 	doZoom: function(value){
 		var animation = ol.animation.zoom({
-            duration: 200,
-            resolution: view.getResolution()
-        });
-        map.beforeRender(animation);
-        view.setZoom(value);
+			duration: 200,
+			resolution: view.getResolution()
+		});
+		map.beforeRender(animation);
+		view.setZoom(value);
 	},
 	to: function(lat,lng,lvl){
 		var animation = ol.animation.zoom({
-            duration: 200,
-            resolution: view.getResolution()
-        });
-        map.beforeRender(animation);
+			duration: 200,
+			resolution: view.getResolution()
+		});
+		map.beforeRender(animation);
 		view.setZoom(lvl);
 		zoom.setCenter(ol.proj.transform([lng,lat], 'EPSG:4326', 'EPSG:3857'));
 	},
@@ -384,13 +384,13 @@ loadmap = function(){
 	
 	var defaultZoom = (settings.user.center != '0,0') ? settings.user.zoom : 2;
 	view = new ol.View({
-        center: ol.proj.transform(settings.user.center, 'EPSG:4326', 'EPSG:3857'),
-        minZoom: settings.system.minZoom,
-        zoom: defaultZoom,
-        maxZoom: settings.system.maxZoom,
-        rotation: 0,
+		center: ol.proj.transform(settings.user.center, 'EPSG:4326', 'EPSG:3857'),
+		minZoom: settings.system.minZoom,
+		zoom: defaultZoom,
+		maxZoom: settings.system.maxZoom,
+		rotation: 0,
 		projection: 'EPSG:3857'
-    });
+	});
 	
 	geolocation = new ol.Geolocation({
 		projection: view.getProjection()
@@ -409,25 +409,25 @@ loadmap = function(){
 	});
 
 	//all available basemaps
-    var baseMaps = {
-        'map': {
-            source: new ol.source.OSM(),
-            name: 'OpenStreetMap'
-        },
+	var baseMaps = {
+		'map': {
+			source: new ol.source.OSM(),
+			name: 'OpenStreetMap'
+		},
 		'hyb': {
-            source : new ol.source.BingMaps({
-                key: settings.system.bingKey,
-                imagerySet: 'AerialWithLabels'
-            }),
-            name: 'Bing maps (Hybrid)'
-        },
-        'sat': {
-            source : new ol.source.BingMaps({
-                key: settings.system.bingKey,
-                imagerySet: 'Aerial'
-            }),
-            name: 'Bing maps (Satellite)'
-        }
+			source : new ol.source.BingMaps({
+				key: settings.system.bingKey,
+				imagerySet: 'AerialWithLabels'
+			}),
+			name: 'Bing maps (Hybrid)'
+		},
+		'sat': {
+			source : new ol.source.BingMaps({
+				key: settings.system.bingKey,
+				imagerySet: 'Aerial'
+			}),
+			name: 'Bing maps (Satellite)'
+		}
 	};
 	mapLayer = {
 		list: {},
@@ -438,27 +438,27 @@ loadmap = function(){
 		},
 		load: function(id) {
 			if (id !== this.current) {
-		        this.list[id].setVisible(true); //show requested map
-		        this.list[this.current].setVisible(false); //hide the visible map
-		        this.current = id;
-		        $('#map_' + id).prop('checked', true);
-		    }
+				this.list[id].setVisible(true); //show requested map
+				this.list[this.current].setVisible(false); //hide the visible map
+				this.current = id;
+				$('#map_' + id).prop('checked', true);
+			}
 		}
 	};
 
 	var baseMapLayer = [];
-    for (var key in baseMaps) {
-        var newLayer = new ol.layer.Tile({
-            source: baseMaps[key].source,
-            visible: (mapLayer.current === key)
-        });
-        mapLayer.register(key, newLayer, baseMaps[key].name);
-        baseMapLayer.push(newLayer);
-    }
+	for (var key in baseMaps) {
+		var newLayer = new ol.layer.Tile({
+			source: baseMaps[key].source,
+			visible: (mapLayer.current === key)
+		});
+		mapLayer.register(key, newLayer, baseMaps[key].name);
+		baseMapLayer.push(newLayer);
+	}
 	
-    var baseMap = new ol.layer.Group({
-        layers: baseMapLayer
-    });
+	var baseMap = new ol.layer.Group({
+		layers: baseMapLayer
+	});
 	
 	//limit renderer when using twitter app on iOS (iPad, iPhone, iPod)
 	if(navigator.userAgent.match(/Twitter for iP/i)){
@@ -467,23 +467,23 @@ loadmap = function(){
 		renderer = ['canvas', 'dom', 'webgl'];
 	}
 	map = new ol.Map({
-        target: document.getElementById('map'),
-        layers: [ baseMap],
-        view: view,
-        controls: [
+		target: document.getElementById('map'),
+		layers: [ baseMap],
+		view: view,
+		controls: [
 			new ol.control.ScaleLine(),
 			new ol.control.Attribution({
-			    collapsible: false
+				collapsible: false
 			})
-        ],
-        interactions: ol.interaction.defaults({
-            rotate: false,
-            altShiftDragRotate: false,
-            pinchRotate: false
-        }),
+		],
+		interactions: ol.interaction.defaults({
+			rotate: false,
+			altShiftDragRotate: false,
+			pinchRotate: false
+		}),
 		overlays: [overlay],
 		renderer: renderer
-    });
+	});
 	
 	map.on('moveend', function(){
 		$('#inputZoomLevel').val(view.getZoom());
