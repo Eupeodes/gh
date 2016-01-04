@@ -154,6 +154,17 @@ a {
 		font-size: 8pt;
 		padding: 3px;
 	}
+	#zoomControl {
+		input {
+			width: 18px;
+			height: 18px;
+		}
+		.sliderParent{
+			float: right;
+			width: 230px;
+			margin-top: 7px
+		}
+	}
 }
 
 #hamburger {

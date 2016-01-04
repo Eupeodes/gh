@@ -40,18 +40,18 @@
 		<?php
 		if(array_key_exists('debug', filter_input_array(INPUT_GET))){
 		?>
+		<link rel="stylesheet" type="text/css" href="/css/style.css" />
 		<script type="text/javascript" src="/js/external/jquery.min.js"></script>
 		<script type="text/javascript" src="/js/external/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="/js/external/jquery.ui.touch-punch.min.js"></script>
 		<script type="text/javascript" src="/js/external/ol.js"></script>
 		
 		<script type="text/javascript" src="/js/script.js"></script>
-		<link rel="stylesheet" type="text/css" href="/css/style.css" />
 		<?php
 		} else {
 		?>
-		<script type="text/javascript" src="/js/js.js?v=<?=file_get_contents('../version')?>"></script>
 		<link rel="stylesheet" type="text/css" href="/css/css.css?v=<?=file_get_contents('../version')?>" />
+		<script type="text/javascript" src="/js/js.js?v=<?=file_get_contents('../version')?>"></script>
 		<?php
 		}
 		?>
@@ -84,7 +84,7 @@
 
 			<div class="control" id="zoomControl">
 				<div class="title">Zoom <input type="text" name="inputZoomLevel" id="inputZoomLevel" size="2" />
-					<div style="float: right;width:230px;margin-top:9px">
+					<div class="sliderParent">
 						<div class="slider"></div>
 					</div>
 				</div>

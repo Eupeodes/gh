@@ -1,5 +1,10 @@
 #Changelog
 
+## v2.0.8 - 2016-01-04
+* Fixing timezone issue which caused a wrong date to be displayed on the markers west of UTC
+* Fixing display issues on Windows in the Zoom Control
+* Extend execution of js until after css has loaded
+
 ## v2.0.7 - 2016-01-03
 * Separate user config and system config in preparation for storing user confing in a cookie
 * Rename settings.php to config.php, make it object based
