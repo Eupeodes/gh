@@ -244,8 +244,6 @@ var marker = {
 	doDraw: function(json){
 		var date = new Date(json.date);
 		date.setTime( date.getTime() + date.getTimezoneOffset()*60*1000 );
-		console.log(json.date);
-		console.log(date);
 		var day = $('#dayOfWeek').is(':checked') ? days[date.getDay()] : date.getDate();
 		var bgColor = $('#markerControl .colorPicker.selected').attr('bgcolor');
 		var fgColor = $('#markerControl .colorPicker.selected').attr('fgcolor');
@@ -390,7 +388,8 @@ loadmap = function(){
         minZoom: settings.system.minZoom,
         zoom: defaultZoom,
         maxZoom: settings.system.maxZoom,
-        rotation: 0
+        rotation: 0,
+		projection: 'EPSG:3857'
     });
 	
 	geolocation = new ol.Geolocation({
@@ -461,6 +460,12 @@ loadmap = function(){
         layers: baseMapLayer
     });
 	
+	//limit renderer when using twitter app on iOS (iPad, iPhone, iPod)
+	if(navigator.userAgent.match(/Twitter for iP/i)){
+		renderer = 'dom';
+	} else {
+		renderer = ['canvas', 'dom', 'webgl'];
+	}
 	map = new ol.Map({
         target: document.getElementById('map'),
         layers: [ baseMap],
@@ -476,7 +481,8 @@ loadmap = function(){
             altShiftDragRotate: false,
             pinchRotate: false
         }),
-		overlays: [overlay]
+		overlays: [overlay],
+		renderer: renderer
     });
 	
 	map.on('moveend', function(){
@@ -502,6 +508,11 @@ loadmap = function(){
 			return feature.get('date');
 		});
 		map.getTargetElement().style.cursor = hit ? 'pointer' : '';
+	});
+	$(window).resize(function(){
+		$('#map').width($(window).width());
+		$('#map').height($(window).height());
+		map.updateSize();
 	});
 };
 

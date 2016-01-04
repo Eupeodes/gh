@@ -1,5 +1,8 @@
 #Changelog
 
+## v2.0.9 - 2016-01-04
+Fix for display in Twitter app on iOS
+
 ## v2.0.8 - 2016-01-04
 * Fixing timezone issue which caused a wrong date to be displayed on the markers west of UTC
 * Fixing display issues on Windows in the Zoom Control

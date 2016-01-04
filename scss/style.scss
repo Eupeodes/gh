@@ -26,11 +26,10 @@ a {
 }
 
 #map {
-	position: fixed;
-	top: 0px;
-	bottom: 0px;
-	left: 0px;
-	right: 0px;
+	width: 100%;
+	height: 100%;
+	padding: 0px;
+	margin: 0px;
 }
 
 #controlsTop, #controls {
