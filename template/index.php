@@ -12,7 +12,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<link rel="icon" type="image/png" href="img/icon.png" />
-        <link rel="apple-touch-icon" type="image/png" href="img/icon.png" />
+		<link rel="apple-touch-icon" type="image/png" href="img/icon.png" />
 		<title>Geohashing.info</title>
 		
 		<script type="text/javascript">
@@ -58,8 +58,11 @@
 	</head>
 	<body>
 		<div id="greybox">
-			<div id="infobox"></div>
-			<div id="helpbox"></div>
+			<div>
+				<a href="#" id="greybox-closer" class="closer"></a>
+				<div class="title"></div>
+				<div class="content"></div>
+			</div>
 		</div>
 		<div id="map">
 			<div id="popup" class="ol-popup">
@@ -116,6 +119,6 @@
 					<div style="clear:both"></div>
 				</div>
 			</div>
-			<div class="version">Geohashing.info <?=file_get_contents('../version')?> - <?=date('Y-m-d', filemtime('../version'))?></div>
+			<div class="version">Geohashing.info <a href="#" id="openChangelog">v<?=file_get_contents('../version')?></a> - <?=date('Y-m-d', filemtime('../version'))?></div>
 	</body>
 </html>
