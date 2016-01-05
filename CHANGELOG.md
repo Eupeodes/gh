@@ -1,5 +1,9 @@
 #Changelog
 
+## v2.0.10 - 2016-01-05
+* Show changelog
+* Fix for date url parameter (caused by code change in v2.0.7)
+
 ## v2.0.9 - 2016-01-04
 Fix for display in Twitter app on iOS
 
@@ -29,7 +33,7 @@ Zoom level set to 2 when no home location is set
 Use position: fixed and top/bottom/left/right: 0px instead of width/height:100%, prevents overflow in browser which indicate wrong height
 
 ## v2.0.2 - 2016-01-01
-Fix data format being used, month should have leading zero, was omitted because of typing error.
+Fixing date format being used, month should have leading zero, was omitted because of typing error.
 
 ## v2.0.1 - 2015-12-31
 Fixing url compatibility with the old version (mainly the hashed graticules)

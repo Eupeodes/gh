@@ -215,7 +215,7 @@ var marker = {
 				map.removeLayer(markerLayers[i]);
 			}
 			if(!keepPopover){
-				overlay.setPosition(undefined);
+				popover.hide();
 			}
 			markerLayers = [];
 			marker.curDate = marker.date;
@@ -364,6 +364,9 @@ popover = {
 			+ '<button onclick="window.open(&quot;https://maps.google.com/?q='+this.lat+','+this.lng+'&quot;)">Google Maps</button>'
 			);
 		overlay.setPosition(this.feature.getGeometry().getCoordinates());
+	},
+	hide: function(){
+		overlay.setPosition(undefined);
 	}
 };
 loadmap = function(){
@@ -463,6 +466,11 @@ loadmap = function(){
 	//limit renderer when using twitter app on iOS (iPad, iPhone, iPod)
 	if(navigator.userAgent.match(/Twitter for iP/i)){
 		renderer = 'dom';
+		$(window).resize(function(){
+			$('#map').width($(window).width());
+			$('#map').height($(window).height());
+			map.updateSize();
+		});
 	} else {
 		renderer = ['canvas', 'dom', 'webgl'];
 	}
@@ -509,11 +517,26 @@ loadmap = function(){
 		});
 		map.getTargetElement().style.cursor = hit ? 'pointer' : '';
 	});
-	$(window).resize(function(){
-		$('#map').width($(window).width());
-		$('#map').height($(window).height());
-		map.updateSize();
-	});
+};
+
+var greybox = {
+	isOpen: false,
+	open: function(box){
+		$.getJSON('/text/'+box, function(data){
+			$('#greybox .title').html(data.title);
+			$('#greybox .content').html(data.content);
+			$('#greybox').fadeIn();
+			$('#greybox div').slideDown();
+			greybox.isOpen = true;
+		});
+		return false;
+	},
+	close: function(){
+		$('#greybox>div').slideUp();
+		$('#greybox').fadeOut();
+		$('#greybox .closer').blur();
+		greybox.isOpen = false;
+	}
 };
 
 $(window).load(function() {
@@ -573,8 +596,29 @@ $(window).load(function() {
 			$("#markerControl .colorPicker").removeClass('selected');
 			$('#'+evt.target.id).addClass('selected');
 			settings.user.colorSet = $('#'+evt.target.id).attr('setid');
-			console.log(settings.user);
 			marker.get(true, true);
 		}
 	});
+	$('#openChangelog').click(function(){
+		greybox.open('changelog');
+		return false;
+	});
+	$('#greybox').click(function(){greybox.close()});
+	$('#greybox>div').click(function(evt) {
+		evt.stopPropagation()
+	});
+	$('#greybox .closer').click(function(){
+		greybox.close();
+		return false;
+	});
+	    $(document).keyup(function(g) {
+        c = g.keyCode || g.which;
+        if (c === 27) {
+            if (greybox.isOpen) {
+				greybox.close()
+            } else {
+                popover.hide()
+            }
+        }
+    })
 });

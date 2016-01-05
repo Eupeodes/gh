@@ -32,6 +32,9 @@ foreach($params as $param){
 			case 'lon':
 				$settings['home'] = '['.filter_input(INPUT_GET, 'lon').','.filter_input(INPUT_GET, 'lat').']';
 				break;
+			case 'date':
+				$date = filter_input(INPUT_GET, 'date');
+				break;
 			default:
 				$settings[$param] = filter_input(INPUT_GET, $param);
 		}
