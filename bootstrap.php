@@ -14,21 +14,18 @@ spl_autoload_register(
 $data = filter_input_array(INPUT_GET);
 $url = strtok(filter_input(INPUT_SERVER, 'REQUEST_URI'), '?');
 
-if(is_null($data)){
+if(is_null($data) && $url === '/'){
 	define('DEBUG', false);
-    $file = 'index.php';
+    $page = 'index';
 } else {
 	define('DEBUG', array_key_exists('debug', $data));
-	$file = strtok($url, '/');
+	$page = strtok($url, '/');
 }
-if(substr($file, -4) === '.php' && strpos($file, '..') === false){
-	$page = substr($file, 0, -4);
-} else {
-	$page = $file;
-	$file .= '.php';
+if(substr($page, -4) === '.php' && strpos($page, '..') === false){
+	$page = substr($page, 0, -4);
 }
 
-if(file_exists(dirname(__FILE__).'/view/'.ucfirst($file))){
+if(file_exists(dirname(__FILE__).'/view/'.ucfirst($page).'.php')){
 	$class = '\\view\\'.ucfirst($page);
 	$view = new $class($url);
 	$view->get();

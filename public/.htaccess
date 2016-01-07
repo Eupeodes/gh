@@ -1,13 +1,13 @@
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.+)$ index.php?url=$1 [QSA]
+RewriteRule ^ index.php [QSA]
 
 # 480 weeks
 <FilesMatch "\.png$">
-#Header set Cache-Control "max-age=290304000, public"
+	Header set Cache-Control "max-age=290304000, public"
 </FilesMatch>
 
 <FilesMatch "(css.css|js.js)$">
-Header set Cache-Control "max-age=290304000, public"
+	Header set Cache-Control "max-age=290304000, public"
 </FilesMatch>
