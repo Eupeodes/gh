@@ -7,7 +7,7 @@
 		<meta name="application-name" content="Geohashing.info">
 		<meta name="keywords" content="geohashing, gps, xkcd">
 		<meta name="description" content="A calculator for geohashing">
-		<meta name="page-version" content="<?=$version?>">
+		<meta name="page-version" content="<?=$this->version?>">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -21,24 +21,24 @@
 					minZoom: 1,
 					maxZoom: 19,
 					minDate: '<?=\model\Date::min()?>',
-					maxDate: '<?=$maxDate?>',
-					date: '<?=$date?>',
-					refreshMaxDate: '<?=\model\Date::nextCheck($maxDate)?>',
+					maxDate: '<?=$this->maxDate?>',
+					date: '<?=$this->date?>',
+					refreshMaxDate: '<?=\model\Date::nextCheck($this->maxDate)?>',
 					bingKey: '<?=\config::$keys['bing']?>'
 				},
 				user: {
-					home: <?=$settings['home']?>,
-					center: <?=$settings['center']?>,
-					zoom: <?=$settings['zoom']?>,
+					home: <?=$this->settings['home']?>,
+					center: <?=$this->settings['center']?>,
+					zoom: <?=$this->settings['zoom']?>,
 					controlsVisible: true,
-					type: '<?=$settings['type']?>',
-					single: <?=$settings['single'] ? 'true' : 'false'?>,
-					colorSet: <?=$settings['colorSet']?>
+					type: '<?=$this->settings['type']?>',
+					single: <?=$this->settings['single'] ? 'true' : 'false'?>,
+					colorSet: <?=$this->settings['colorSet']?>
 				}
 			};
 		</script>
 		<?php
-		if(array_key_exists('debug', filter_input_array(INPUT_GET))){
+		if(DEBUG){
 		?>
 		<link rel="stylesheet" type="text/css" href="/css/style.css" />
 		<script type="text/javascript" src="/js/external/jquery.min.js"></script>
@@ -50,8 +50,8 @@
 		<?php
 		} else {
 		?>
-		<link rel="stylesheet" type="text/css" href="/css/css.css?v=<?=file_get_contents('../version')?>" />
-		<script type="text/javascript" src="/js/js.js?v=<?=file_get_contents('../version')?>"></script>
+		<link rel="stylesheet" type="text/css" href="/css/css.css?v=<?=$this->version?>" />
+		<script type="text/javascript" src="/js/js.js?v=<?=$this->version?>"></script>
 		<?php
 		}
 		?>
@@ -82,7 +82,7 @@
 			<div class="control" id="dateControl">
 				<div class="title">Date <input type="text" id="datepicker" name="inputDate" size="10" /> <span class="hint">(yyyy-mm-dd)</a></div>
 				<div class="content datepicker"></div>
-				<div class="content"><input type="checkbox" id="showWeek" <?=($settings['single']) ? '' : 'checked'?> /><label for="showWeek"> Show up to 6 following days</label></div>
+				<div class="content"><input type="checkbox" id="showWeek" <?=($this->settings['single']) ? '' : 'checked'?> /><label for="showWeek"> Show up to 6 following days</label></div>
 			</div>
 
 			<div class="control" id="zoomControl">
@@ -100,8 +100,8 @@
 			<div class="control" id="markerControl">
 				<div class="title">Markers</div>
 				<ul>
-					<li><input type="radio" name="dayOf" id="dayOfMonth" <?=$settings['dayOf']==='month' ? 'checked' :''?> /><label for="dayOfMonth">Show day of month (1 - 31)</label></li>
-					<li><input type="radio" name="dayOf" id="dayOfWeek" <?=$settings['dayOf']==='week' ? 'checked' :''?>/><label for="dayOfWeek">Show day of week (Mo - Su)</label></li>
+					<li><input type="radio" name="dayOf" id="dayOfMonth" <?=$this->settings['dayOf']==='month' ? 'checked' :''?> /><label for="dayOfMonth">Show day of month (1 - 31)</label></li>
+					<li><input type="radio" name="dayOf" id="dayOfWeek" <?=$this->settings['dayOf']==='week' ? 'checked' :''?>/><label for="dayOfWeek">Show day of week (Mo - Su)</label></li>
 				</ul>
 				<div class="content">
 					<?php
@@ -114,11 +114,11 @@
 						['f0f','fff']
 					];
 					foreach($colors as $key=>$color){
-						echo '<div class="colorPicker'.($settings['colorSet'] === $key ? ' selected' :'').'" style="background-color:#'.$color[0].';color:#'.$color[1].'" fgcolor="'.$color[1].'" bgcolor="'.$color[0].'" setid="'.$key.'" id="color_'.$key.'">x</div>';
+						echo '<div class="colorPicker'.($this->settings['colorSet'] === $key ? ' selected' :'').'" style="background-color:#'.$color[0].';color:#'.$color[1].'" fgcolor="'.$color[1].'" bgcolor="'.$color[0].'" setid="'.$key.'" id="color_'.$key.'">x</div>';
 					}?>
 					<div style="clear:both"></div>
 				</div>
 			</div>
-			<div class="version">Geohashing.info <a href="#" id="openChangelog">v<?=file_get_contents('../version')?></a> - <?=date('Y-m-d', filemtime('../version'))?></div>
+			<div class="version">Geohashing.info <a href="#" id="openChangelog">v<?=$this->version?></a> - <?=date('Y-m-d', filemtime('../version'))?></div>
 	</body>
 </html>

@@ -611,14 +611,14 @@ $(window).load(function() {
 		greybox.close();
 		return false;
 	});
-	    $(document).keyup(function(g) {
-        c = g.keyCode || g.which;
-        if (c === 27) {
-            if (greybox.isOpen) {
+	$(document).keyup(function(g) {
+		c = g.keyCode || g.which;
+		if (c === 27) {
+			if (greybox.isOpen) {
 				greybox.close()
-            } else {
-                popover.hide()
-            }
-        }
-    })
+			} else {
+				popover.hide()
+			}
+		}
+    });
 });
