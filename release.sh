@@ -29,8 +29,8 @@ sass --style compressed --sourcemap=none scss/style.scss public/css/style.css
 yc public/js/script.js -o public/js/script.min.js
 
 #merge css and js into single files
-cat `grep -o '"[^"]*\.js"' template/index.php | sed 's/script.js/script.min.js/g;s/"//g;s/^/public/g'` > public/js/js.js
-cat `grep -o '"[^"]*\.css"' template/index.php | sed 's/"//g;s/^/public/g'` > public/css/css.css
+cat `grep -o '"[^"]*\.js"' template/index.tpl.php | sed 's/script.js/script.min.js/g;s/"//g;s/^/public/g'` > public/js/js.js
+cat `grep -o '"[^"]*\.css"' template/index.tpl.php | sed 's/"//g;s/^/public/g'` > public/css/css.css
 
 #store version
 echo $version > version

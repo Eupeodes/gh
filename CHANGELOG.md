@@ -1,5 +1,14 @@
 #Changelog
 
+## v2.0.12 - 2016-01-08
+* Better scroll of greybox on iOS
+* Scroll greybox back to top when opening
+* Greybox full screen on small screen
+
+## v2.0.11 - 2016-01-07
+* Fix some pixel defects in markers
+* Rewrite of views in php
+
 ## v2.0.10 - 2016-01-05
 * Show changelog
 * Fix for date url parameter (caused by code change in v2.0.7)

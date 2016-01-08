@@ -369,6 +369,7 @@ popover = {
 		overlay.setPosition(undefined);
 	}
 };
+
 loadmap = function(){
 	content = $('#popup-content');
 	closer = $('#popup-closer');
@@ -527,6 +528,7 @@ var greybox = {
 			$('#greybox .content').html(data.content);
 			$('#greybox').fadeIn();
 			$('#greybox div').slideDown();
+			$('#greybox .content').scrollTop(0);
 			greybox.isOpen = true;
 		});
 		return false;
