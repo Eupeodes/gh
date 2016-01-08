@@ -119,6 +119,9 @@
 					<div style="clear:both"></div>
 				</div>
 			</div>
+			<div class="control" id="twitterControl">
+				<div class="content"><a href="https://twitter.com/geohashing" title="Follow @geohashing on twitter"><img src="/img/twitter.png" />@geohashing</a></div>
+			</div>
 			<div class="version">Geohashing.info <a href="#" id="openChangelog">v<?=$this->version?></a> - <?=date('Y-m-d', filemtime('../version'))?></div>
 	</body>
 </html>
