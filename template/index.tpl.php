@@ -11,8 +11,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<link rel="icon" type="image/png" href="img/icon.png" />
-		<link rel="apple-touch-icon" type="image/png" href="img/icon.png" />
+		<link rel="icon" type="image/png" href="/img/icon.png" />
+		<link rel="apple-touch-icon" type="image/png" href="/img/icon.png" />
 		<title>Geohashing.info</title>
 		
 		<script type="text/javascript">
