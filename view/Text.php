@@ -17,8 +17,9 @@ class Text{
 	}
 	
 	public function get(){
-		$Parsedown = new \lib\external\parseDown\ParseDown();
-		$text = $Parsedown->text(file_get_contents(dirname(__FILE__).'/../'.strtoupper($this->file).'.md'));
+		$parseDown = new \lib\external\parseDown\ParseDown();
+		$parseDown->setMarkupEscaped(true);
+		$text = $parseDown->text(file_get_contents(dirname(__FILE__).'/../'.strtoupper($this->file).'.md'));
 		preg_match('/^<h1?.*>(?P<title>.*)<\/h1>\n(?P<content>.*)$/ims', $text, $this->matches);
 		header('Content-type: text/json');
 		echo json_encode(['title'=>  $this->matches['title'],'content'=>$this->matches['content']]);

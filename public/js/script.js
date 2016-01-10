@@ -113,6 +113,28 @@ var zoom = {
 	}
 };
 
+function homeGrid(point){
+	var what = $('input[name=setHomeGrid]:checked').val();
+	var point = ol.proj.transform(point, 'EPSG:3857', 'EPSG:4326');
+	switch(what){
+		case 'home':
+			home.set(point);
+			break;
+		case 'grid':
+			grid.init(point);
+			marker.get(true);
+			break;
+		case 'both':
+			home.set(point);
+			grid.init(point);
+			marker.get(true);
+			break;
+		default:
+			//do nothing
+	}
+	$('#setHomeGridNothing').prop('checked', true);
+}
+
 var home = {
 	layer: null,
 	marker: null,
@@ -146,16 +168,13 @@ var home = {
 	}
 };
 
-var marker = {
-	curDate: null,
-	date: null,
-	init: function(){
-		var c = home.point;
+var grid = {
+	init: function(point){
+		var c = point;
 		var baseLat = Math.floor(Math.abs(c[1]));
 		var baseLng = Math.floor(Math.abs(c[0]));
 		var latSign = (c[1]>=0 ? 1 : -1);
 		var lngSign = (c[0]>=0 ? 1 : -1);
-		
 		if(baseLat === 0){
 			ys = [0,0,1];
 			if(latSign === 1){
@@ -204,8 +223,37 @@ var marker = {
 			}
 			xl = [[lngSign*(baseLng-1), lngSign*(baseLng+2)], [lngSign*baseLng, lngSign*(baseLng+1)]];
 		}
-		marker.drawGrid();
+		this.draw();
 	},
+	draw: function(){
+		map.removeLayer(gridLayer);
+		gridVector = new ol.source.Vector({});
+		for(var x=0;x<xl[1].length;x++){
+			this.drawLine([[xl[1][x],yl[0][0]],[xl[1][x],yl[0][1]]]);
+		}
+		for(var y=0;y<yl[1].length;y++){
+			this.drawLine([[xl[0][0],yl[1][y]],[xl[0][1],yl[1][y]]]);
+		}
+		gridLayer = new ol.layer.Vector({
+			source: gridVector,
+			style: new ol.style.Style({
+				fill: new ol.style.Fill({ color: '#0000FF', weight: 4 }),
+				stroke: new ol.style.Stroke({ color: '#0000FF', width: 2 })
+			})
+		});
+		map.addLayer(gridLayer);
+	},
+	drawLine: function(points){
+		for (var i = 0; i < points.length; i++) {
+			points[i] = ol.proj.transform(points[i], 'EPSG:4326', 'EPSG:3857');
+		}
+		gridVector.addFeature(new ol.Feature({geometry: new ol.geom.LineString(points)}));
+	}
+};
+
+var marker = {
+	curDate: null,
+	date: null,
 	get: function(force, keepPopover){
 		force = typeof force !== 'undefined' ? force : false;
 		keepPopover = typeof keepPopover !== 'undefined' ? keepPopover : false;
@@ -297,30 +345,6 @@ var marker = {
 			})
 		}));
 		map.addLayer(markerLayers[markerLayers.length-1]);
-	},
-	drawGrid: function(){
-		map.removeLayer(gridLayer);
-		gridVector = new ol.source.Vector({});
-		for(var x=0;x<xl[1].length;x++){
-			marker.drawLine([[xl[1][x],yl[0][0]],[xl[1][x],yl[0][1]]]);
-		}
-		for(var y=0;y<yl[1].length;y++){
-			marker.drawLine([[xl[0][0],yl[1][y]],[xl[0][1],yl[1][y]]]);
-		}
-		gridLayer = new ol.layer.Vector({
-			source: gridVector,
-			style: new ol.style.Style({
-				fill: new ol.style.Fill({ color: '#0000FF', weight: 4 }),
-				stroke: new ol.style.Stroke({ color: '#0000FF', width: 2 })
-			})
-		});
-		map.addLayer(gridLayer);
-	},
-	drawLine: function(points){
-		for (var i = 0; i < points.length; i++) {
-			points[i] = ol.proj.transform(points[i], 'EPSG:4326', 'EPSG:3857');
-		}
-		gridVector.addFeature(new ol.Feature({geometry: new ol.geom.LineString(points)}));
 	}
 };
 
@@ -400,16 +424,12 @@ loadmap = function(){
 		projection: view.getProjection()
 	});
 	
-	if(settings.user.center == '0,0'){
+	if(settings.user.home == '0,0'){
 		geolocation.setTracking(true);
 	}
 	
-	geolocation.on('change', function(evt) {
-		zoom.setCenter(geolocation.getPosition());
-		home.set(ol.proj.transform(geolocation.getPosition(), 'EPSG:3857', 'EPSG:4326'));
-		geolocation.setTracking(false);
-		marker.init();
-		marker.get(true);
+	geolocation.on('change', function() {
+		homeGrid(geolocation.getPosition());
 	});
 
 	//all available basemaps
@@ -506,9 +526,7 @@ loadmap = function(){
 		if(typeof feature !== 'undefined' && feature.get('date')){
 			popover.show(feature);
 		} else {
-			home.set(ol.proj.transform(evt.coordinate, 'EPSG:3857', 'EPSG:4326'));
-			marker.init();
-			marker.get(true);
+			homeGrid(evt.coordinate);
 		}
 	});
 	
@@ -526,6 +544,7 @@ var greybox = {
 		$.getJSON('/text/'+box, function(data){
 			$('#greybox .title').html(data.title);
 			$('#greybox .content').html(data.content);
+			$("#greybox .content a[href^='http']").attr('target','_blank');
 			$('#greybox').fadeIn();
 			$('#greybox div').slideDown();
 			$('#greybox .content').scrollTop(0);
@@ -546,9 +565,11 @@ $(window).load(function() {
 	$('#showWeek').change(function(){
 		marker.get(true);
 	});
+	
 	$('#datepicker').change(function(){
 		date.change();
 	});
+	
 	$('#dateControl .content.datepicker').datepicker({
 		changeMonth: true,
 		changeYear: true,
@@ -567,12 +588,15 @@ $(window).load(function() {
 			marker.get();
 		}
 	});
+	
 	date.setTimer(settings.refreshMaxDate);
 	
 	$('#inputZoomLevel').change(function(){
 		zoom.change();
 	});
+	
 	$('#inputZoomLevel').val(settings.user.zoom);
+	
 	$('#zoomControl .slider').slider({
 		value: settings.user.zoom,
 		min: settings.system.minZoom,
@@ -582,17 +606,23 @@ $(window).load(function() {
 			zoom.doZoom(ui.value);
 		}
 	});
+	
 	if($(window).width()>640 & settings.user.controlsVisible){
 		controls.show(0);
 	}
-	if(settings.user.center != '0,0'){
-		home.set(settings.user.center);
-		marker.init();
+	
+	if(settings.user.home != '0,0'){
+		home.set(settings.user.home);
+	}
+	if(settings.user.grid != '0,0'){
+		grid.init(settings.user.grid);
 		marker.get();
 	}
+	
 	$("input[name='dayOf']").change(function(){
 		marker.get(true, true);
 	});
+	
 	$("#markerControl .colorPicker").click(function(evt){
 		if(!$(evt.target).hasClass('selected')){
 			$("#markerControl .colorPicker").removeClass('selected');
@@ -601,18 +631,30 @@ $(window).load(function() {
 			marker.get(true, true);
 		}
 	});
+	
 	$('#openChangelog').click(function(){
 		greybox.open('changelog');
 		return false;
 	});
-	$('#greybox').click(function(){greybox.close()});
-	$('#greybox>div').click(function(evt) {
-		evt.stopPropagation()
+	
+	$('#openHelp').click(function(){
+		greybox.open('help');
+		return false;
 	});
+	
+	$('#greybox').click(function(){
+		greybox.close();
+	});
+	
+	$('#greybox>div').click(function(evt) {
+		evt.stopPropagation();
+	});
+	
 	$('#greybox .closer').click(function(){
 		greybox.close();
 		return false;
 	});
+	
 	$(document).keyup(function(g) {
 		c = g.keyCode || g.which;
 		if (c === 27) {
@@ -623,5 +665,18 @@ $(window).load(function() {
 			}
 		}
     });
+	
 	$("a[href^='http']").attr('target','_blank');
+	
+	$('input[name=setHomeGrid]').change(function(){
+		geolocation.setTracking(false);
+	});
+	
+	$('#redetectHome').click(function(){
+		if($('input[name=setHomeGrid]:checked').val() === 'nothing'){
+			alert('Please first select what to detect');
+		} else {
+			geolocation.setTracking(true);
+		}
+	});
 });

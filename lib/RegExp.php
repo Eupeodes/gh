@@ -43,8 +43,8 @@ class RegExp {
 	}
 	
 	public static function graticule(){
-		$m90 = '[0-8]?[0-9]';
-		$m180 = '(1[0-7]|[0]?[0-9])?[0-9]';
+		$m90 = '[0-8]?[0-9](.[0-9]{1,})?';
+		$m180 = '(1[0-7]|[0]?[0-9])?[0-9](.[0-9]{1,})?';
 		
 		return '('.
 				self::named('ns1', $m90.'[ns]').self::named('ew1', $m180.'[ew]').'|'.
@@ -62,9 +62,9 @@ class RegExp {
 			$value = strtolower($value);
 			if(!is_numeric($key) && $value !== ''){
 				if(strpos($key, 'ns') !== false){
-					$lat = (strpos($value, 's') !== false ? '-' : '') . intval(str_replace(array('n', 's'), '', $value));
+					$lat = (strpos($value, 's') !== false ? '-' : '') . floatval(str_replace(array('n', 's'), '', $value));
 				} elseif(strpos($key, 'ew') !== false){
-					$lng = (strpos($value, 'w') !== false ? '-' : '') . intval(str_replace(array('e', 'w'), '', $value));
+					$lng = (strpos($value, 'w') !== false ? '-' : '') . floatval(str_replace(array('e', 'w'), '', $value));
 				}
 			}
 		}

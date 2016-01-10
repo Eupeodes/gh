@@ -29,6 +29,7 @@
 				user: {
 					home: <?=$this->settings['home']?>,
 					center: <?=$this->settings['center']?>,
+					grid: <?=$this->settings['grid']?>,
 					zoom: <?=$this->settings['zoom']?>,
 					controlsVisible: true,
 					type: '<?=$this->settings['type']?>',
@@ -84,19 +85,29 @@
 				<div class="content datepicker"></div>
 				<div class="content"><input type="checkbox" id="showWeek" <?=($this->settings['single']) ? '' : 'checked'?> /><label for="showWeek"> Show up to 6 following days</label></div>
 			</div>
-
+			<div class="control" id="mapControl">
+				<div class="title">Map</div>
+				<ul></ul>
+			</div>
 			<div class="control" id="zoomControl">
 				<div class="title">Zoom <input type="text" name="inputZoomLevel" id="inputZoomLevel" size="2" />
 					<div class="sliderParent">
 						<div class="slider"></div>
 					</div>
 				</div>
-				<div class="content"><button onclick="zoom.reset();">Reset zoom and center</button> <button onclick="geolocation.setTracking(true);">Redetect home</button></div>
+				<div class="content"><button onclick="zoom.reset();">Reset zoom and center</button> <button id="redetectHome">Redetect</button></div>
 			</div>
-			<div class="control" id="mapControl">
-				<div class="title">Map</div>
-				<ul></ul>
+			<?php if(DEBUG){?>
+			<div class="control" id="homeControl">
+				<div class="title">Map click / redetect action</div>
+				<ul>
+					<li><input type="radio" name="setHomeGrid" value="nothing" id="setHomeGridNothing" <?=$this->settings['home'] !== '[0,0]' ? 'checked' : ''?> /><label for="setHomeGridNothing">Do nothing (click)</label></li>
+					<li><input type="radio" name="setHomeGrid" value="both" id="setHomeGridBoth" <?=$this->settings['home'] === '[0,0]' && $this->settings['home'] === $this->settings['grid'] ? 'checked' : ''?> /><label for="setHomeGridBoth">Move home and center of grid</label></li>
+					<li><input type="radio" name="setHomeGrid" value="home" id="setHomeGridHome" <?=$this->settings['home'] === '[0,0]' && $this->settings['home'] !== $this->settings['grid'] ? 'checked' : ''?> /><label for="setHomeGridHome">Only move home</label></li>
+					<li><input type="radio" name="setHomeGrid" value="grid" id="setHomeGridGrid" /><label for="setHomeGridGrid">Only move center of grid</label></li>
+				</ul>
 			</div>
+			<?php }?>
 			<div class="control" id="markerControl">
 				<div class="title">Markers</div>
 				<ul>
@@ -119,9 +130,10 @@
 					<div style="clear:both"></div>
 				</div>
 			</div>
+			
 			<div class="control" id="twitterControl">
 				<div class="content"><a href="https://twitter.com/geohashing" title="Follow @geohashing on twitter"><img src="/img/twitter.png" />@geohashing</a></div>
 			</div>
-			<div class="version">Geohashing.info <a href="#" id="openChangelog">v<?=$this->version?></a> - <?=date('Y-m-d', filemtime('../version'))?></div>
+			<div class="version">Geohashing.info <a href="#" id="openChangelog">v<?=$this->version?></a> - <?=date('Y-m-d', filemtime('../version'))?> | <a href="#" id="openHelp">Help</a></div>
 	</body>
 </html>

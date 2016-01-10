@@ -1,5 +1,12 @@
 #Changelog
 
+## v2.0.14 - 2016-01-10
+* Implemented setting map center and grid center through url parameters, documentation follows
+* Help page added
+
+## v2.0.13 - 2016-01-08
+Follow @geohashing on twitter link added
+
 ## v2.0.12 - 2016-01-08
 * Better scroll of greybox on iOS
 * Scroll greybox back to top when opening

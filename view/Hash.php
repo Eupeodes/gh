@@ -12,9 +12,13 @@ class Hash {
 	private $global;
 	private $output;
 	private $matches;
+	private $fetchGlobal;
 	
-	public function __construct($url){
-		if(preg_match('/^\/hash(.php)?(?P<wk>\/wk)?\/'.\lib\RegExp::date().'(\/(?P<graticule>'.\lib\RegExp::graticule().'))?'.\lib\RegExp::ext(true).'$/i', $url, $this->matches)){
+	public function __construct($url, $fetchGlobal = false){
+		$this->fetchGlobal = $fetchGlobal;
+		if($fetchGlobal){
+			$this->date = new \DateTime($url);
+		} elseif(preg_match('/^\/hash(.php)?(?P<wk>\/wk)?\/'.\lib\RegExp::date().'(\/(?P<graticule>'.\lib\RegExp::graticule().'))?'.\lib\RegExp::ext(true).'$/i', $url, $this->matches)){
 			$y = $this->matches['y'];
 			$m = $this->matches['m'];
 			$d = $this->matches['d'];
@@ -31,7 +35,10 @@ class Hash {
 	}
 	
 	public function get(){
-		if(\lib\RegExp::partExists('graticule', $this->matches)){//if a graticule is given export data as gpx
+		if($this->fetchGlobal){
+			$this->doCalc();
+			return $this->output;
+		} elseif(\lib\RegExp::partExists('graticule', $this->matches)){//if a graticule is given export data as gpx
 			$this->graticule = $this->matches['graticule'];
 			$this->global = ($this->matches['graticule'] === 'global');
 			if(!$this->global){
@@ -154,5 +161,10 @@ class Hash {
 				$this->output['global'] = new \model\Hash($this->date, $dowDayBefore, true);
 			}
 		}
+	}
+	
+	//needed for global
+	public function getInt($hash){
+		return substr($hash, 0, strpos($hash, '.'));
 	}
 }
