@@ -31,10 +31,11 @@
 					center: <?=$this->settings['center']?>,
 					grid: <?=$this->settings['grid']?>,
 					zoom: <?=$this->settings['zoom']?>,
-					controlsVisible: true,
+					controlsVisible: <?=$this->settings['controlsVisible'] ? 'true' : 'false'?>,
 					type: '<?=$this->settings['type']?>',
 					single: <?=$this->settings['single'] ? 'true' : 'false'?>,
-					colorSet: <?=$this->settings['colorSet']?>
+					colorSet: '<?=$this->settings['colorSet']?>',
+					dayOf: '<?=$this->settings['dayOf']?>'
 				}
 			};
 		</script>
@@ -72,10 +73,8 @@
 			</div>
 		</div>
 		<div id="controlsTop">
-			<div id="hamburger" onclick="controls.toggle();">
-				<div></div>
-				<div></div>
-				<div></div>
+			<div class="buttons">
+				<img src="/img/settings.png" id="toggleControls" /><img src="/img/help.png" id="openHelp"/>
 			</div>
 			<div class="title">Geohashing.info</div>
 		</div>
@@ -97,7 +96,6 @@
 				</div>
 				<div class="content"><button onclick="zoom.reset();">Reset zoom and center</button> <button id="redetectHome">Redetect</button></div>
 			</div>
-			<?php if(DEBUG){?>
 			<div class="control" id="homeControl">
 				<div class="title">Map click / redetect action</div>
 				<ul>
@@ -107,7 +105,6 @@
 					<li><input type="radio" name="setHomeGrid" value="grid" id="setHomeGridGrid" /><label for="setHomeGridGrid">Only move center of grid</label></li>
 				</ul>
 			</div>
-			<?php }?>
 			<div class="control" id="markerControl">
 				<div class="title">Markers</div>
 				<ul>
@@ -117,12 +114,12 @@
 				<div class="content">
 					<?php
 					$colors = [
-						['f00','fff'],
-						['00f','fff'],
-						['060','fff'],
-						['0f0','000'],
-						['0ff','000'],
-						['f0f','fff']
+						'f00'=>['f00','fff'],
+						'00f'=>['00f','fff'],
+						'060'=>['060','fff'],
+						'0f0'=>['0f0','000'],
+						'0ff'=>['0ff','000'],
+						'f0f'=>['f0f','fff']
 					];
 					foreach($colors as $key=>$color){
 						echo '<div class="colorPicker'.($this->settings['colorSet'] === $key ? ' selected' :'').'" style="background-color:#'.$color[0].';color:#'.$color[1].'" fgcolor="'.$color[1].'" bgcolor="'.$color[0].'" setid="'.$key.'" id="color_'.$key.'">x</div>';
@@ -131,9 +128,18 @@
 				</div>
 			</div>
 			
+			<div class="control" id="saveControl">
+				<div class="title">Save settings</div>
+				<div class="content">
+					<input type="checkbox" id="controlsVisible" <?=$this->settings['controlsVisible'] ? 'checked' : ''?>/><label for="controlsVisible">Show controls by default</label><br/>
+					<button onclick="gcookie.set();return false;">Save my settings in a cookie</button> <button onclick="gcookie.unset();return false;">Delete cookie</button>
+				</div>
+			</div>
+			
 			<div class="control" id="twitterControl">
 				<div class="content"><a href="https://twitter.com/geohashing" title="Follow @geohashing on twitter"><img src="/img/twitter.png" />@geohashing</a></div>
 			</div>
-			<div class="version">Geohashing.info <a href="#" id="openChangelog">v<?=$this->version?></a> - <?=date('Y-m-d', filemtime('../version'))?> | <a href="#" id="openHelp">Help</a></div>
+			<div class="version">Geohashing.info <a href="#" id="openChangelog">v<?=$this->version?></a> - <?=date('Y-m-d', filemtime('../version'))?></div>
+		</div>
 	</body>
 </html>

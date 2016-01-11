@@ -42,7 +42,7 @@ a {
 }
 
 #controlsTop {
-	left: -280px;
+	left: -242px;
 	height: 40px;
 	top: 0px;
 	border-bottom-right-radius: 5px;
@@ -50,6 +50,16 @@ a {
 		padding: 8px;
 		font-weight: bold;
 		font-size: 20pt;
+	}
+	.buttons{
+		float: right;
+		img {
+			border: solid 2px white;
+			margin-right: 2px;
+			margin-top: 2px;
+			border-radius: 5px;
+			cursor: pointer;
+		}
 	}
 }
 
@@ -217,6 +227,7 @@ a {
 		background: white;
 		margin: auto;
 		width: 80%;
+		max-width: 1000px;
 		height: 80%;
 		box-sizing: border-box; 
 		border-radius: 2px;
@@ -243,6 +254,34 @@ a {
 			overflow-y: auto;
 			-webkit-overflow-scrolling: touch;
 			height: calc(100% - 40px);
+			p {
+				margin-top: 3px;
+			}
+			td {
+				vertical-align: top;
+			}
+		}
+		table{
+			border-spacing: 0px;
+			width: 100%;
+			thead tr{
+				background: #bbb;
+			}
+			tbody tr:nth-child(odd) {
+				background-color: #ddd;
+			}
+			td {
+				padding: 3px 2px;
+			}
+		}
+		&.help td:nth-child(-n+2){
+			white-space: nowrap;
+		}
+		&.settings td:first-child{
+			font-weight: bold;
+			&:after {
+				content: ':';
+			}
 		}
 	}
 	h1{

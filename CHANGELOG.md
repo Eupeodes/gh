@@ -1,5 +1,8 @@
 #Changelog
 
+## v2.1.0 - 2016-01-11
+Settings can now be saved
+
 ## v2.0.14 - 2016-01-10
 * Implemented setting map center and grid center through url parameters, documentation follows
 * Help page added

@@ -34,7 +34,7 @@ var controls = {
 	},
 	hide: function(){
 		$('#controls').animate({left:'-320px'});
-		$('#controlsTop').animate({left:'-280px',borderBottomRightRadius:5});
+		$('#controlsTop').animate({left:'-242px',borderBottomRightRadius:5});
 		$('.ol-scale-line').animate({left:'8px'});
 	},
 	toggle: function(){
@@ -109,7 +109,7 @@ var zoom = {
 	},
 	reset: function(){
 		zoom.doZoom(settings.user.zoom);
-		zoom.setCenter(ol.proj.transform(home.point, 'EPSG:4326', 'EPSG:3857'));
+		view.setCenter(ol.proj.transform(settings.user.center, 'EPSG:4326', 'EPSG:3857'));
 	}
 };
 
@@ -159,6 +159,7 @@ var home = {
 		map.addLayer(home.layer);
 		if(view.getZoom() === 2){
 			zoom.to(point[1],point[0],settings.user.zoom);
+			settings.user.center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
 		}
 	},
 	distance: function(location){
@@ -170,6 +171,7 @@ var home = {
 
 var grid = {
 	init: function(point){
+		settings.user.grid = point;
 		var c = point;
 		var baseLat = Math.floor(Math.abs(c[1]));
 		var baseLng = Math.floor(Math.abs(c[0]));
@@ -458,7 +460,7 @@ loadmap = function(){
 		current: settings.user.type,
 		register: function(id, layer, name) {
 			this.list[id] = layer;
-			addLiAlpha('#mapControl', '<li onclick="javascript:mapLayer.load(\'' + id + '\')"><input type="radio" name="map" onchange="javascript:mapLayer.load(\'' + id + '\')" id="map_' + id + '" ' + ((this.current === id) ? 'checked="checked"' : '') + '/> <label for="map_' + id + '">' + name + '</label></li>');
+			addLiAlpha('#mapControl', '<li onclick="javascript:mapLayer.load(\'' + id + '\')"><input type="radio" name="map" value="' + id + '" onchange="javascript:mapLayer.load(\'' + id + '\')" id="map_' + id + '" ' + ((this.current === id) ? 'checked="checked"' : '') + '/> <label for="map_' + id + '">' + name + '</label></li>');
 		},
 		load: function(id) {
 			if (id !== this.current) {
@@ -542,6 +544,7 @@ var greybox = {
 	isOpen: false,
 	open: function(box){
 		$.getJSON('/text/'+box, function(data){
+			$('#greybox>div').attr('class', box);
 			$('#greybox .title').html(data.title);
 			$('#greybox .content').html(data.content);
 			$("#greybox .content a[href^='http']").attr('target','_blank');
@@ -557,6 +560,31 @@ var greybox = {
 		$('#greybox').fadeOut();
 		$('#greybox .closer').blur();
 		greybox.isOpen = false;
+	}
+};
+
+var gcookie = {
+	set: function(){
+		// Build the expiration date string:
+		var expiration_date = new Date();
+		var cookie_string = '';
+		expiration_date.setFullYear(expiration_date.getFullYear() + 10);
+		// Build the set-cookie string:
+		settings.user.center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
+		settings.user.zoom = view.getZoom();
+		settings.user.single = !$('#showWeek').is(':checked'); 
+		settings.user.dayOf = $('#dayOfWeek').is(':checked') ? 'week' : 'month';
+		settings.user.type = $('input[name=map]:checked').val();
+		settings.user.controlsVisible = $('#controlsVisible').is(':checked');
+		cookie_string = "config="+JSON.stringify(settings.user)+";secure; path=/; expires=" + expiration_date.toGMTString();
+		// Create/update the cookie:
+		document.cookie = cookie_string;
+		greybox.open('settings');
+	},
+	unset: function(){
+		cookie_string = "config=;secure ;path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+		document.cookie = cookie_string;
+		window.alert('Your cookie is deleted');
 	}
 };
 
@@ -607,7 +635,7 @@ $(window).load(function() {
 		}
 	});
 	
-	if($(window).width()>640 & settings.user.controlsVisible){
+	if($(window).width()>640 && settings.user.controlsVisible){
 		controls.show(0);
 	}
 	
@@ -630,6 +658,10 @@ $(window).load(function() {
 			settings.user.colorSet = $('#'+evt.target.id).attr('setid');
 			marker.get(true, true);
 		}
+	});
+	
+	$('#toggleControls').click(function(){
+		controls.toggle();
 	});
 	
 	$('#openChangelog').click(function(){

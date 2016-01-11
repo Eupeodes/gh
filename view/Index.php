@@ -21,8 +21,27 @@ class Index {
 			'zoom'=>8,
 			'type'=>'map',
 			'dayOf'=>'month',
-			'colorSet'=>4
+			'colorSet'=>'0ff',
+			'controlsVisible'=>true
 		];
+		$cookie = filter_input(INPUT_COOKIE, 'config');
+		if(!is_null($cookie)){
+			$cookieData = json_decode($cookie);
+			foreach($cookieData as $key=>$val){
+				switch($key){
+					case 'home':
+					case 'center':
+					case 'grid':
+						$this->settings[$key] = '['.$val[0].','.$val[1].']';
+						break;
+					case 'single':
+					case 'controlsVisible':
+						$this->settings[$key] = ($val === 'true');
+					default:
+						$this->settings[$key] = $val;
+				}
+			}
+		}
 
 		$this->maxDate = \model\Date::max();
 		$this->date = date('Y-m-d');
@@ -108,7 +127,7 @@ class Index {
 				$this->settings['center'] = '['.$lng.', '.$lat.']';
 			}
 		} else {
-			if(preg_match('/(\/|^)(?P<type>'. \lib\RegExp::mapType().')(\/|$)/i', $this->url, $this->matches)){
+			if(preg_match('/(\/|^)t:(?P<type>'. \lib\RegExp::mapType().')(\/|$)/i', $this->url, $this->matches)){
 				$this->settings['type'] = $this->matches['type'];
 			}
 			if(preg_match('/(\/|^)'. \lib\RegExp::date().'(\/|$)/i', $this->url, $this->matches)){
