@@ -711,4 +711,5 @@ $(window).load(function() {
 			geolocation.setTracking(true);
 		}
 	});
+	$('#controls').niceScroll();
 });

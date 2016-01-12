@@ -69,10 +69,10 @@ a {
 	height: 100%;
 	height: calc(100% - 40px);
 	left: -320px;
-	overflow-y: auto;
-	-webkit-overflow-scrolling: touch;
+	overflow: hidden;
 	div.control {
 		border-bottom: $border;
+		width: 320px;
 		div.title {
 			padding: 5px;
 			color: white;

@@ -45,6 +45,7 @@
 		<link rel="stylesheet" type="text/css" href="/css/style.css" />
 		<script type="text/javascript" src="/js/external/jquery.min.js"></script>
 		<script type="text/javascript" src="/js/external/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="/js/external/jquery.nicescroll.min.js"></script>
 		<script type="text/javascript" src="/js/external/jquery.ui.touch-punch.min.js"></script>
 		<script type="text/javascript" src="/js/external/ol.js"></script>
 		
@@ -127,15 +128,16 @@
 					<div style="clear:both"></div>
 				</div>
 			</div>
-			
+
 			<div class="control" id="saveControl">
 				<div class="title">Save settings</div>
 				<div class="content">
 					<input type="checkbox" id="controlsVisible" <?=$this->settings['controlsVisible'] ? 'checked' : ''?>/><label for="controlsVisible">Show controls by default</label><br/>
 					<button onclick="gcookie.set();return false;">Save my settings in a cookie</button> <button onclick="gcookie.unset();return false;">Delete cookie</button>
+					<button onclick="greybox.open('settings');return false;" style="margin-top:3px;">View settings</button>
 				</div>
 			</div>
-			
+
 			<div class="control" id="twitterControl">
 				<div class="content"><a href="https://twitter.com/geohashing" title="Follow @geohashing on twitter"><img src="/img/twitter.png" />@geohashing</a></div>
 			</div>

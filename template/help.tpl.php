@@ -1,6 +1,7 @@
 <?php 
 $title = 'Help';
 $content = '<p>Geohashing.info is written by Marten Tacoma. Code can be found on <a href="https://github.com/Eupeodes/gh">https://github.com/Eupeodes/gh</a></p>
+<p>Settings can be passed from cookies or url parameters. Location can be determined by geolocation. Url parameters are the most important, followed by cookies. Geolocation is only used if a location is not given in another way.</p>
 <h2>Short url parameters</h2>
 <p>Parameters should be separated by forward slashes (/), most can be combined with each other (except global with any lat/lng)</p>
 <table>
@@ -54,7 +55,7 @@ $content = '<p>Geohashing.info is written by Marten Tacoma. Code can be found on
 </tr>
 </tbody>
 </table>
-<p><em>* If home is given but either grid center or map center isn\'t those are set to the same value as home.
+<p><em>* If home is given but either grid center or map center isn\'t, those are set to the same value as home.
 The fields for home, grid center and map center can be combined in any combination in a single statement, do so by combining the letters of the parameters you want before the colon (:), of course they can also be used in own separate statements</em></p>
 <h2>Long url parameters</h2>
 <p><em>Everywhere where <strong>lng</strong> is used you can also use <strong>lon</strong></em>
