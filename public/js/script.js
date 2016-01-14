@@ -8,8 +8,16 @@
  * TODO:
  * create popups like http://openlayers.org/en/v3.12.1/examples/popup.html
  */
+
 var map, view, settings, ol, xs,xt,xl, ys,yt,yl, gridLayer, gridVector, geolocation, mapLayer, markerLayers = [], content, closer, overlay, days = {0:'Su', 1:'Mo', 2:'Tu', 3:'We', 4:'Th', 5:'Fr', 6:'Sa'};
 
+function closeDisclaimer(){
+	var expiration_date = new Date();
+	expiration_date.setTime(expiration_date.getTime()+(30*24*60*60*1000));
+	var cookie_string = "disclaimer="+(Date.now() / 1000 | 0)+";secure; path=/; expires=" + expiration_date.toGMTString();
+	document.cookie = cookie_string;
+	greybox.close();
+}
 
 //insert li at the right alphabetical place in an ul
 function addLiAlpha(ul, li){
@@ -669,6 +677,10 @@ $(window).load(function() {
 		return false;
 	});
 	
+	$('#openDisclaimer').click(function(){
+		greybox.open('disclaimer');
+		return false;
+	})
 	$('#openHelp').click(function(){
 		greybox.open('help');
 		return false;
@@ -712,4 +724,8 @@ $(window).load(function() {
 		}
 	});
 	$('#controls').niceScroll();
+	
+	if(settings.system.showDisclaimer){
+		greybox.open('disclaimer');
+	}
 });

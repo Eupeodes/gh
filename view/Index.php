@@ -10,6 +10,14 @@ class Index {
 	private $set = false;
 	private $matches;
 	private $url;
+	private $showDisclaimer = true;
+	
+	public function __construct() {
+		if(array_key_exists('disclaimer', $_COOKIE)){
+			$this->showDisclaimer = false;
+			setcookie("disclaimer", time(), time()+30*24*60*60);
+		}
+	}
 
 	public function view($url) {
 		$this->url = $url;

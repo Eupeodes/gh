@@ -24,7 +24,8 @@
 					maxDate: '<?=$this->maxDate?>',
 					date: '<?=$this->date?>',
 					refreshMaxDate: '<?=\model\Date::nextCheck($this->maxDate)?>',
-					bingKey: '<?=\config::$keys['bing']?>'
+					bingKey: '<?=\config::$keys['bing']?>',
+					showDisclaimer: <?=$this->showDisclaimer ? 'true' : 'false'?>
 				},
 				user: {
 					home: <?=$this->settings['home']?>,
@@ -141,7 +142,7 @@
 			<div class="control" id="twitterControl">
 				<div class="content"><a href="https://twitter.com/geohashing" title="Follow @geohashing on twitter"><img src="/img/twitter.png" />@geohashing</a></div>
 			</div>
-			<div class="version">Geohashing.info <a href="#" id="openChangelog">v<?=$this->version?></a> - <?=date('Y-m-d', filemtime('../version'))?></div>
+			<div class="version">Geohashing.info <a href="#" id="openChangelog">v<?=$this->version?></a> - <?=date('Y-m-d', filemtime('../version'))?> | <a href="#" id="openDisclaimer">Disclaimer</a></div>
 		</div>
 	</body>
 </html>
