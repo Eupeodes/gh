@@ -10,7 +10,13 @@
 class config {
 	public static $keys = [
 		'bing'=>'', //key for bing maps
-		'geonames'=>'' //username for geonames
+		'geonames'=>'', //username for geonames
+		'twitter' => [
+			'consumerKey'       => '',
+			'consumerSecret'    => '',
+			'accessToken'       => '',
+			'accessTokenSecret' => ''
+		]
 	];
 	public static $db = [
 		'type' => '',//mysql or postgresql

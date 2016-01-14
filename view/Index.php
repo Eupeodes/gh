@@ -11,7 +11,7 @@ class Index {
 	private $matches;
 	private $url;
 
-	public function __construct($url) {
+	public function view($url) {
 		$this->url = $url;
 		$this->settings = [
 			'home'=>'[0,0]',
@@ -59,9 +59,6 @@ class Index {
 			$this->settings['center'] = $this->settings['center'] === '[0,0]' ? $this->settings['home'] : $this->settings['center'];
 			$this->settings['grid'] = $this->settings['grid'] === '[0,0]' ? $this->settings['home'] : $this->settings['grid'];
 		}
-	}
-	
-	public function get(){
 		require('../template/index.tpl.php');
 	}
 
@@ -136,8 +133,8 @@ class Index {
 			}
 			
 			if(preg_match('/(\/|^)g(lobal)?(\/|$)/i', $this->url)){
-				$hash = new \view\Hash($this->date, true);
-				$data = $hash->get();
+				$hash = new \view\Hash();
+				$data = $hash->getGlobal($this->date);
 				$this->settings['home'] = '['.$hash->getInt($data['global']->lng).'.5,'.$hash->getInt($data['global']->lat).'.5]';
 				$this->settings['center'] = $this->settings['home'];
 				$this->settings['grid'] = $this->settings['home'];

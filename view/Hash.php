@@ -12,13 +12,9 @@ class Hash {
 	private $global;
 	private $output;
 	private $matches;
-	private $fetchGlobal;
 	
-	public function __construct($url, $fetchGlobal = false){
-		$this->fetchGlobal = $fetchGlobal;
-		if($fetchGlobal){
-			$this->date = new \DateTime($url);
-		} elseif(preg_match('/^\/hash(.php)?(?P<wk>\/wk)?\/'.\lib\RegExp::date().'(\/(?P<graticule>'.\lib\RegExp::graticule().'))?'.\lib\RegExp::ext(true).'$/i', $url, $this->matches)){
+	public function view($url){
+		if(preg_match('/^\/hash(.php)?(?P<wk>\/wk)?\/'.\lib\RegExp::date().'(\/(?P<graticule>'.\lib\RegExp::graticule().'))?'.\lib\RegExp::ext(true).'$/i', $url, $this->matches)){
 			$y = $this->matches['y'];
 			$m = $this->matches['m'];
 			$d = $this->matches['d'];
@@ -26,6 +22,7 @@ class Hash {
 				$this->date = new \DateTime($y.'-'.$m.'-'.$d);
 				$this->ext = array_key_exists('ext', $this->matches) ? $this->matches['ext'] : null;
 				$this->wk = (strlen($this->matches['wk']) > 0);
+				$this->get();
 			} else {
 				\lib\Error::send(400, 'This date is not a valid date');
 			}
@@ -34,11 +31,8 @@ class Hash {
 		}
 	}
 	
-	public function get(){
-		if($this->fetchGlobal){
-			$this->doCalc();
-			return $this->output;
-		} elseif(\lib\RegExp::partExists('graticule', $this->matches)){//if a graticule is given export data as gpx
+	private function get(){
+		if(\lib\RegExp::partExists('graticule', $this->matches)){//if a graticule is given export data as gpx
 			$this->graticule = $this->matches['graticule'];
 			$this->global = ($this->matches['graticule'] === 'global');
 			if(!$this->global){
@@ -52,6 +46,12 @@ class Hash {
 		} else {
 			$this->getWeek();
 		}
+	}
+	
+	public function getGlobal($date){
+		$this->date = new \DateTime($date);
+		$this->doCalc();
+		return $this->output;
 	}
 	
 	private function getSingle(){

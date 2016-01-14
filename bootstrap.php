@@ -7,7 +7,7 @@
 
 spl_autoload_register(
 	function($className){
-		require_once(dirname(__FILE__).'/'.str_replace('\\', '/', $className).'.php');
+		require_once dirname(__FILE__).'/'.str_replace('\\', '/', $className).'.php';
 	}
 );
 
@@ -27,9 +27,9 @@ if($url === '/'){
 
 if(file_exists(dirname(__FILE__).'/view/'.ucfirst($page).'.php')){
 	$class = '\\view\\'.ucfirst($page);
-	$view = new $class($url);
-	$view->get();
+	$view = new $class();
+	$view->view($url);
 } else {
-	$view = new \view\Index($url);
-	$view->get();
+	$view = new \view\Index();
+	$view->view($url);
 }

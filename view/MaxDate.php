@@ -3,7 +3,7 @@
 namespace view;
 
 class MaxDate{
-	public function get(){
+	public function view(){
 		$maxDate = \model\Date::max();
 		$nextCheck = \model\Date::nextCheck($maxDate);
 		$output = array('maxDate'=>$maxDate, 'nextCheck'=>$nextCheck);
