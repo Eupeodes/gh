@@ -1,5 +1,8 @@
 #Changelog
 
+## v2.1.3 - 2016-01-14
+Added disclaimer
+
 ## v2.1.2 - 2016-01-11
 * Display scrollbar again, but now not disrupting layout of controls using niceScroll (https://code.google.com/p/jquery-nicescroll/)
 * Upgrade jQuery to v2.2.0
