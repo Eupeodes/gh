@@ -15,7 +15,7 @@ class Index {
 	public function __construct() {
 		if(array_key_exists('disclaimer', $_COOKIE)){
 			$this->showDisclaimer = false;
-			setcookie("disclaimer", time(), time()+30*24*60*60);
+			setcookie("disclaimer", time(), time()+30*24*60*60, '/', '', true);
 		}
 	}
 
