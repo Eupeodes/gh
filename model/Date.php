@@ -13,7 +13,8 @@ class Date{
 	}
 	
 	public static function max(){
-		$res = self::get($query = 'SELECT max(date) AS value FROM dow');$dt = new \DateTime(array_shift($res)->value);
+		$res = self::get($query = 'SELECT max(date) AS value FROM dow');
+		$dt = new \DateTime(array_shift($res)->value);
 		$dt->add(new \DateInterval('P1D'));
 		return $dt->format('Y-m-d');
 	}

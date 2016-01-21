@@ -150,8 +150,8 @@ class Hash {
 		if($dow !== false){
 			$this->output['west'] = new \model\Hash($this->date, $dow);
 		}
-		if($this->date->format('Y-m-d') < 2008-05-27){
-			$this->output['east'] = $this->west;
+		if($this->date->format('Y-m-d') < '2008-05-27'){
+			$this->output['east'] = $this->output['west'];
 			if($dowDayBefore !== false){
 				$this->output['global'] = new \model\Hash($this->date, $dowDayBefore, true);
 			}

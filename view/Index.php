@@ -11,6 +11,10 @@ class Index {
 	private $matches;
 	private $url;
 	private $showDisclaimer = true;
+	private $centerSet = false;
+	private $gridSet = false;
+	private $homeSet = false;
+	private $cookie = [];
 	
 	public function __construct() {
 		if(array_key_exists('disclaimer', $_COOKIE)){
@@ -34,21 +38,7 @@ class Index {
 		];
 		$cookie = filter_input(INPUT_COOKIE, 'config');
 		if(!is_null($cookie)){
-			$cookieData = json_decode($cookie);
-			foreach($cookieData as $key=>$val){
-				switch($key){
-					case 'home':
-					case 'center':
-					case 'grid':
-						$this->settings[$key] = '['.$val[0].','.$val[1].']';
-						break;
-					case 'single':
-					case 'controlsVisible':
-						$this->settings[$key] = ($val === 'true');
-					default:
-						$this->settings[$key] = $val;
-				}
-			}
+			$this->parseCookie($cookie);
 		}
 
 		$this->maxDate = \model\Date::max();
@@ -63,11 +53,31 @@ class Index {
 			$this->readPath();
 		}
 		
-		if($this->settings['home'] !== '[0,0]'){
-			$this->settings['center'] = $this->settings['center'] === '[0,0]' ? $this->settings['home'] : $this->settings['center'];
-			$this->settings['grid'] = $this->settings['grid'] === '[0,0]' ? $this->settings['home'] : $this->settings['grid'];
+		if($this->homeSet || $this->centerSet || $this->gridSet){
+			$this->cookie = [];
 		}
+		$this->setLocation('home');
+		$this->setLocation('center');
+		$this->setLocation('grid');
 		require('../template/index.tpl.php');
+	}
+
+	private function parseCookie($cookie){
+		$cookieData = json_decode($cookie);
+		foreach($cookieData as $key=>$val){
+			switch($key){
+				case 'home':
+				case 'center':
+				case 'grid':
+					$this->cookie[$key] = '['.$val[0].','.$val[1].']';
+					break;
+				case 'single':
+				case 'controlsVisible':
+					$this->settings[$key] = ($val === 'true');
+				default:
+					$this->settings[$key] = $val;
+			}
+		}
 	}
 
 	private function readGet(){
@@ -81,14 +91,17 @@ class Index {
 					case 'lng':
 					case 'lon':
 						$this->settings['home'] = '['.filter_input(INPUT_GET, $param, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION).','.filter_input(INPUT_GET, 'lat', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION).']';
+						$this->homeSet = true;
 						break;
 					case 'clng':
 					case 'clon':
 						$this->settings['center'] = '['.filter_input(INPUT_GET, $param, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION).','.filter_input(INPUT_GET, 'clat', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION).']';
+						$this->centerSet = true;
 						break;
 					case 'glng':
 					case 'glon':
 						$this->settings['grid'] = '['.filter_input(INPUT_GET, $param, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION).','.filter_input(INPUT_GET, 'glat', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION).']';
+						$this->gridSet = true;
 						break;
 					case 'date':
 						$date = filter_input(INPUT_GET, 'date', FILTER_SANITIZE_STRING);
@@ -119,6 +132,7 @@ class Index {
 				$geohash = new \lib\external\GeoHash();
 				list($lat, $lng) = $geohash->decode($this->matches['home']);
 				$this->settings['home'] = '['.$lng.', '.$lat.']';
+				$this->homeSet = true;
 			}
 			if(\lib\RegExp::partExists('zoom', $this->matches)){
 				$this->settings['zoom'] = $this->matches['zoom'];
@@ -130,6 +144,7 @@ class Index {
 				$geohash = new \lib\external\GeoHash();
 				list($lat, $lng) = $geohash->decode($this->matches['center']);
 				$this->settings['center'] = '['.$lng.', '.$lat.']';
+				$this->centerSet = true;
 			}
 		} else {
 			if(preg_match('/(\/|^)t:(?P<type>'. \lib\RegExp::mapType().')(\/|$)/i', $this->url, $this->matches)){
@@ -146,6 +161,9 @@ class Index {
 				$this->settings['home'] = '['.$hash->getInt($data['global']->lng).'.5,'.$hash->getInt($data['global']->lat).'.5]';
 				$this->settings['center'] = $this->settings['home'];
 				$this->settings['grid'] = $this->settings['home'];
+				$this->homeSet = true;
+				$this->centerSet = true;
+				$this->gridSet = true;
 			} else if(preg_match_all('/(?=(\/|^)(?P<graticule>(?P<w>[cgh]{0,}:)?'.\lib\RegExp::graticule().')(\/|$))/i', $this->url, $this->matches, PREG_SET_ORDER)){
 				foreach($this->matches as $match){
 					list($lat, $lng) = \lib\RegExp::parseGraticule($match);
@@ -156,12 +174,15 @@ class Index {
 					}
 					if(strpos($match['w'], 'c') !== false){
 						$this->settings['center'] = '['.$lng.', '.$lat.']';
+						$this->centerSet = true;
 					}
 					if(strpos($match['w'], 'g') !== false){
 						$this->settings['grid'] = '['.$lng.', '.$lat.']';
+						$this->gridSet = true;
 					}
 					if(strpos($match['w'], 'h') !== false){
 						$this->settings['home'] = '['.$lng.', '.$lat.']';
+						$this->homeSet = true;
 					}
 				}
 			}
@@ -179,6 +200,20 @@ class Index {
 	private function date($y,$m,$d){
 		if(checkdate($m,$d,$y) && $y.'-'.$m.'-'.$d <= $this->maxDate){
 			$this->date = $y.'-'.$m.'-'.$d;
+		}
+	}
+	
+	private function setLocation($key){
+		$bool = $key.'Set';
+		if(!$this->$bool){
+			if (array_key_exists($key, $this->cookie)){
+				$this->settings[$key] = $this->cookie[$key];
+				if($key === 'home'){
+					$this->homeSet = true;
+				}
+			} elseif ($this->homeSet){
+				$this->settings[$key] = $this->settings['home'];
+			}
 		}
 	}
 }

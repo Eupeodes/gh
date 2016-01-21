@@ -1,5 +1,9 @@
 #Changelog
 
+## v2.1.4 - 2016-01-21
+* Fix bug that messed up East coordinates before introduction of W30
+* Fix bug which caused cookie parameters taking precedence over url parameters
+
 ## v2.1.3 - 2016-01-14
 Added disclaimer
 
