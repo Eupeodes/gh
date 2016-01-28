@@ -1,5 +1,8 @@
 #Changelog
 
+## v2.1.5 - 2016-01-28
+Added option to leave the click/redetect action set
+
 ## v2.1.4 - 2016-01-21
 * Fix bug that messed up East coordinates before introduction of W30
 * Fix bug which caused cookie parameters taking precedence over url parameters

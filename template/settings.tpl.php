@@ -31,5 +31,6 @@ if(is_null($cookie)){
 		. '<tr><td>Show single day</td><td>'.($settings['single'] ? 'Yes' : 'No').'</td></tr>'
 		. '<tr><td>Marker color</td><td>#'.$settings['colorSet'].'</td></tr>'
 		. '<tr><td>Marker shows day of</td><td>'.$settings['dayOf'].'</td></tr>'
+		. '<tr><td>Map click action is set to \'Do Nothing\' after click or redetect</td><td>'.($settings['resetSetHomeGrid'] ? 'Yes' : 'No').'</td></tr>'
 		. '</table>';
 }

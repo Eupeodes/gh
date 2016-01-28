@@ -34,7 +34,8 @@ class Index {
 			'type'=>'map',
 			'dayOf'=>'month',
 			'colorSet'=>'0ff',
-			'controlsVisible'=>true
+			'controlsVisible'=>true,
+			'resetSetHomeGrid'=>true
 		];
 		$cookie = filter_input(INPUT_COOKIE, 'config');
 		if(!is_null($cookie)){
