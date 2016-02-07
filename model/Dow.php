@@ -11,8 +11,7 @@ class Dow{
 	/* get dow of one day or range of days */
 	public static function get(DateTime $date_start, DateTime $date_end = null){
 		$db = Db::getInstance();
-		$query = 'SELECT * FROM dow WHERE date'.(is_null($date_end) ? '=:date_start' : ' BETWEEN :date_start AND :date_end');
-		$req = $db->prepare($query);
+		$req = $db->prepare('SELECT * FROM dow WHERE date'.(is_null($date_end) ? '=:date_start' : ' BETWEEN :date_start AND :date_end'));
 		$req->bindParam(':date_start', $date_start->format('Y-m-d'), PDO::PARAM_STR);
 		if(!is_null($date_end)){
 			$req->bindParam(':date_end', $date_end->format('Y-m-d'), PDO::PARAM_STR);
@@ -30,5 +29,39 @@ class Dow{
 				$return = $res;
 		}
 		return $return;
+	}
+	
+	public static function getNew() {
+		$file = explode('/', dirname(__FILE__));
+		array_pop($file);
+		
+		$response = false;
+		if(debug_backtrace()[0]['file'] === implode('/', $file).'/cron.php'){
+			$db = \lib\Db::getInstance();
+			$date = \model\Date::max(false);
+			if(\model\Date::nextCheck($date, 0) <= 0){
+				$dateTime = new \DateTime($date);
+				$req = $db->prepare('INSERT INTO dow VALUES (:date, :dow)');
+				while(true){
+					$url = "http://geo.crox.net/djia/".str_replace("-", "/", $date);
+
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, true);
+					$dow = curl_exec($ch);
+					curl_close($ch);
+					if($dow > 0){
+						$req->execute([':date'=>$date, ':dow'=>$dow]);
+						$response = true;
+						$dateTime->add(new \DateInterval('P1D'));
+						$date = $dateTime->format('Y-m-d');
+					} else {
+						break;
+					}
+				}
+			}
+		}
+		return $response;
 	}
 }

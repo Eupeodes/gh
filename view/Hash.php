@@ -31,6 +31,11 @@ class Hash {
 		}
 	}
 	
+	public function cron($date){
+		$this->date = new \DateTime($date);
+		return $this->getMultiple(null,null);
+	}
+	
 	private function get(){
 		if(\lib\RegExp::partExists('graticule', $this->matches)){//if a graticule is given export data as gpx
 			$this->graticule = $this->matches['graticule'];
@@ -44,7 +49,7 @@ class Hash {
 		} elseif(strlen($this->matches['wk']) === 0){
 			$this->getSingle();
 		} else {
-			$this->getWeek();
+			$this->getMultiple();
 		}
 	}
 	
@@ -75,7 +80,7 @@ class Hash {
 		}
 	}
 	
-	private function getWeek(){
+	private function getMultiple($max = 7, $outputFormat='json'){
 		$output = [];
 		$n = 0;
 		$int = new \DateInterval('P1D');
@@ -86,7 +91,7 @@ class Hash {
 			}
 			$output[] = $this->output;
 			$n++;
-			if($n >= 7){
+			if(!is_null($max) && $n >= $max){
 				break;
 			}
 			$this->date->add($int);
@@ -96,8 +101,16 @@ class Hash {
 		} else {
 			\lib\Cache::permanent();
 		}
-		header('Content-Type: application/json');
-		echo json_encode($output);		
+		if(is_null($outputFormat)){
+			return $output;
+		} else {
+			switch($outputFormat){
+				case 'json':
+				default:
+					header('Content-Type: application/json');
+					echo json_encode($output);
+			}
+		}
 	}
 	
 	private function getGpx(){

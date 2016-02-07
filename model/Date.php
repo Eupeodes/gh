@@ -26,9 +26,9 @@ class Date{
 		return $req->fetchAll(PDO::FETCH_CLASS, '\model\Date');
 	}
 	
-	public static function nextCheck($maxDate){
+	public static function nextCheck($maxDate, $min = 60){
 		$next = new \DateTime($maxDate.' 9:30', new \DateTimeZone('America/New_York'));
 		$diff = $next->getTimestamp()-time()+10;
-		return $diff < 60 ? 60 : $diff;
+		return $diff < $min ? $min : $diff;
 	}
 }
