@@ -1,5 +1,8 @@
 #Changelog
 
+## v2.1.6 - 2016-02-09
+If no date is given in the url use the date of the users pc, previously the date of the server was used
+
 ## v2.1.5 - 2016-01-28
 Added option to leave the click/redetect action set
 

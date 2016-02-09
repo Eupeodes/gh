@@ -43,7 +43,7 @@ class Index {
 		}
 
 		$this->maxDate = \model\Date::max();
-		$this->date = date('Y-m-d');
+		
 		$this->version = file_get_contents('../version');
 
 		if(!empty(filter_input_array(INPUT_GET))){
