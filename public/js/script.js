@@ -39,11 +39,17 @@ var controls = {
 		$('#controls').animate({left:'0px'},duration);
 		$('#controlsTop').animate({left:'0px',borderBottomRightRadius:0},duration);
 		$('.ol-scale-line').animate({left:'328px'},duration);
+		if($(window).width() > 400 && $(window).height() > 400){
+			$('#w30warning').animate({left:'320px',paddingLeft:'0px'});
+		}
 	},
 	hide: function(){
 		$('#controls').animate({left:'-320px'});
 		$('#controlsTop').animate({left:'-242px',borderBottomRightRadius:5});
 		$('.ol-scale-line').animate({left:'8px'});
+		if($(window).width() > 400 && $(window).height() > 400){
+			$('#w30warning').animate({left:'0px',paddingLeft:'80px'});
+		}
 	},
 	toggle: function(){
 		l = $('#controls').css('left');
@@ -151,6 +157,12 @@ var home = {
 	point: null,
 	set: function(point){
 		map.removeLayer(home.layer);
+		while(home.point[0] > 180){
+			home.point[0] -= 360;
+		}
+		while(home.point[0] < 180){
+			home.point[0] += 360;
+		}
 		home.point = point;
 		settings.user.home = point;
 		home.marker = new ol.source.Vector({});
@@ -187,6 +199,10 @@ var grid = {
 		var baseLng = Math.floor(Math.abs(c[0]));
 		var latSign = (c[1]>=0 ? 1 : -1);
 		var lngSign = (c[0]>=0 ? 1 : -1);
+		while(baseLng > 180){
+			baseLng -= 360;
+			settings.user.grid[0] -= lngSign*360;
+		}
 		if(baseLat === 0){
 			ys = [0,0,1];
 			if(latSign === 1){
@@ -290,6 +306,7 @@ var marker = {
 					marker.draw(json);
 				}
 			);
+			w30warning.toggle();
 		}
 	},
 	draw: function(json){
@@ -599,6 +616,47 @@ var gcookie = {
 	}
 };
 
+var w30warning = {
+	toggle: function(){
+		lng = settings.user.grid[0];
+		if(lng < -29.0 || lng >= 179){
+			var date1 = new Date($('#dateControl .content.datepicker').datepicker('option', 'maxDate'));
+			var date2 = new Date($('#datepicker').val());
+			var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+			var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+			if((diffDays === 0 || (diffDays < 7 && $('#showWeek').is(':checked')))){
+				this.show();
+			} else {
+				this.hide();
+			}
+		} else {
+			this.hide();
+		}
+	},
+	show: function(){
+		$('#w30warning .date').html($('#dateControl .content.datepicker').datepicker('option', 'maxDate'));
+		$('#w30warning').fadeIn();
+	},
+	hide: function(){
+		$('#w30warning').fadeOut();
+	},
+	reset: function(){
+		if($(window).width() > 400 && $(window).height() > 400){
+			l = $('#controls').css('left');
+			if(l === '0px'){
+				$('#w30warning').css('left', '320px');
+				$('#w30warning').css('padding-left', '0px');
+			} else if (l === '-320px') {
+				$('#w30warning').css('left', '0px');
+				$('#w30warning').css('padding-left', '80px');
+			}
+		} else {
+			$('#w30warning').css('left', '');
+			$('#w30warning').css('padding-left', '');
+		}
+	}
+};
+
 $(window).load(function() {
 	loadmap();
 	$('#showWeek').change(function(){
@@ -731,4 +789,9 @@ $(window).load(function() {
 	if(settings.system.showDisclaimer){
 		greybox.open('disclaimer');
 	}
+	
+	$('#w30warning .close').click(function(){w30warning.hide();});
+	$(window).on('resize', function(){
+		w30warning.reset();
+	});
 });

@@ -1,5 +1,12 @@
 #Changelog
 
+## v2.2 - 2016-02-12
+* Added warning about the 30W rule which is shown when requesting hashes west of 30 degrees west for the last date the datapicker permits.
+* Fixed an issue causing longitudes that exceeded 180 degrees 
+
+## v2.1.7 - 2016-02-11
+Added link to wiki in help function
+
 ## v2.1.6 - 2016-02-09
 If no date is given in the url use the date of the users pc, previously the date of the server was used
 
