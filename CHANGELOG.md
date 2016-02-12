@@ -1,6 +1,9 @@
 #Changelog
 
-## v2.2 - 2016-02-12
+## v2.2.1 - 2016-02-12
+Fixed bug that broke the whole system
+
+## v2.2.0 - 2016-02-12
 * Added warning about the 30W rule which is shown when requesting hashes west of 30 degrees west for the last date the datapicker permits.
 * Fixed an issue causing longitudes that exceeded 180 degrees 
 

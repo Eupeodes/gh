@@ -157,11 +157,11 @@ var home = {
 	point: null,
 	set: function(point){
 		map.removeLayer(home.layer);
-		while(home.point[0] > 180){
-			home.point[0] -= 360;
+		while(point[0] > 180){
+			point[0] -= 360;
 		}
-		while(home.point[0] < 180){
-			home.point[0] += 360;
+		while(point[0] < -180){
+			point[0] += 360;
 		}
 		home.point = point;
 		settings.user.home = point;
