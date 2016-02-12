@@ -24,7 +24,7 @@ class IrcBot {
 		
 		foreach($res as $key=>$hash){
 			if($key >= 1){
-				$this->sendGlobal($hash['global']);
+				$this->sendGlobal($hash['global'], $hash['date']);
 			}
 		}
 	}
@@ -40,13 +40,13 @@ class IrcBot {
 			if((\model\Date::max() > date('Y-m-d') && $time == 600) || (\model\Date::max() <= date('Y-m-d') && $time == 930)){
 				$hash = new \view\Hash();
 				$data = $hash->getGlobal(date('Y-m-d'))['global'];
-				$this->sendGlobal($data);
+				$this->sendGlobal($data, date('Y-m-d'));
 			}
 		}
 	}
 	
-	private function sendGlobal($data){
-		$this->send('Today\'s globalhash: '.$data->lat.', '.$data->lng.', '.\model\GeoName::get($data->lat, $data->lng)->geoName.' https://geohashing.info/'.date('Ymd').'/global');//post the global
+	private function sendGlobal($data, $date){
+		$this->send((date('Y-m-d') === $date ? 'Today\'s globalhash' : 'Globalhash of '.$date).': '.$data->lat.', '.$data->lng.', '.\model\GeoName::get($data->lat, $data->lng)->geoName.' https://geohashing.info/'.date('Ymd').'/global');//post the global
 			
 	}
 }
