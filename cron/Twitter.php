@@ -44,12 +44,13 @@ class Twitter {
 		$this->hash = new \view\Hash();
 		$res = $this->hash->cron($date);
 		
+		$maxLength = 80 - 2 * $this->short_url_length;
 		foreach($res as $key=>$hash){
 			if($key > 0){
 				$msg = 'Eastern (W30) offset '.$hash['date'].': '.round($hash['east']->lat,5).', '.round($hash['east']->lng,5).' https://geohashing.info/'.  str_replace('-', '', $hash['date']).'/s #geohashing';
 				$this->queue($msg);
 				
-				$msg = 'Globalhash '.$hash['date'].': '.round($hash['global']->lat,5).', '.round($hash['global']->lng,5).', '.\model\GeoName::get($hash['global']->lat, $hash['global']->lng)->geoName.' https://geohashing.info/'.  str_replace('-', '', $hash['date']).'/global #geohashing';
+				$msg = 'Globalhash '.$hash['date'].': '.round($hash['global']->lat,5).', '.round($hash['global']->lng,5).', '.\model\GeoName::get($hash['global']->lat, $hash['global']->lng, $maxLength)->geoName.' https://geohashing.info/'.  str_replace('-', '', $hash['date']).'/global #geohashing';
 				copy('http://maps.googleapis.com/maps/api/staticmap?center=0,0&size=640x640&sensor=false&zoom=1&markers=color:blue%7C'.$hash['global']->lat.','.$hash['global']->lng.'&key=AIzaSyDZpNi_G0_KqacSGUWW6a76EvIZgvFNiVk&maptype=satellite', $base_dir.'/cache/global_'.str_replace('-', '', $hash['date']).'.png');
 				$this->queue($msg, $base_dir.'/cache/global_'.str_replace('-', '', $hash['date']).'.png');
 			}

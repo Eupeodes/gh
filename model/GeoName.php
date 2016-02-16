@@ -7,7 +7,7 @@ class GeoName {
 	public $lng;
 	public $geoName;
 	
-	public function __construct($lat, $lng) {
+	public function __construct($lat, $lng, $maxLength = 999) {
 		$this->lat = $lat;
 		$this->lng = $lng;
 		if($lat <= -67){
@@ -23,9 +23,15 @@ class GeoName {
 				$output .= 'United States, '.$xml->address->adminName1.', '.$xml->address->adminName2.(is_string($xml->address->placename) ? ', '.$xml->address->placename : '');
 			} else {
 				$i = 0;
+				$output = '';
 				foreach($xml->geoname as $geoname){
 					if($i >= 2){
-						$output .= (($output === '') ? '' : ', ').$geoname->name;
+						$newOutput = $output . (($output === '') ? '' : ', ') . $geoname->name;
+						if(strlen($newOutput) > $maxLength){
+							break;
+						} else {
+							$output = $newOutput;
+						}
 					}
 					$i++;
 				}
@@ -34,8 +40,8 @@ class GeoName {
 		$this->geoName = (string) $output;
 	}
 
-	public static function get($lat, $lng){
-		$d = new \model\GeoName($lat, $lng);
+	public static function get($lat, $lng, $maxLength = 999){
+		$d = new \model\GeoName($lat, $lng, $maxLength);
 		return $d;
 	}
 }
