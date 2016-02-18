@@ -5,7 +5,6 @@ CREATE TABLE `dow` (
   `dow` float(8,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`date`),
   UNIQUE KEY `Index` (`date`)
-  UNIQUE KEY `url` (`url`(10))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -16,7 +15,8 @@ CREATE TABLE `page` (
   `url` text,
   `title` text,
   `content` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `url` (`url`(10))
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 INSERT INTO `page` (`url`, `title`, `content`)
