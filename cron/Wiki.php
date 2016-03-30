@@ -86,7 +86,10 @@ class Wiki{
 	private function getUser(){
 		$sep = "<span class=\"mw-changeslist-separator\">. .</span>";
 		$els = explode($sep, $this->el);
-		$this->user = $this->getPart($els[3], ">", "</a>");
+		$this->user = $this->getPart($els[2], ">", "</a>");
+		if(strpos($this->user, '>')){
+			$this->user = substr($this->user, strpos($this->user, '>')+1);
+		}
 	}
 	
 	private function getType(){
