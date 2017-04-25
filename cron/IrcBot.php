@@ -46,7 +46,11 @@ class IrcBot {
 	}
 	
 	private function sendGlobal($data, $date){
-		$this->send((date('Y-m-d') === $date ? 'Today\'s globalhash' : 'Globalhash of '.$date).': '.$data->lat.', '.$data->lng.', '.\model\GeoName::get($data->lat, $data->lng)->geoName.' https://geohashing.info/'.date('Ymd').'/global');//post the global
-			
+		$this->send(
+			(date('Y-m-d') === $date ? 'Today\'s globalhash' : 'Globalhash of '.$date)
+			. ': '.$data->lat.', '.$data->lng
+			. ', '.\model\GeoName::get($data->lat, $data->lng)->geoName
+			. ' https://geohashing.info/'.str_replace('-', '', $date).'/global'
+		);
 	}
 }
