@@ -1,5 +1,8 @@
 #Changelog
 
+## v2.2.2 - 2017-04-25
+Added the option to add a new DOW to the database while still triggering the irc and twitter bot
+
 ## v2.2.1 - 2016-02-12
 Fixed bug that broke the whole system
 
