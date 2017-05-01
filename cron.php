@@ -16,7 +16,7 @@ $ircBot->cron();
 $db = \lib\Db::getInstance();
 $q = $db->prepare('SELECT val FROM conf WHERE field=\'trigger_post_date\'');
 $q->execute();
-$trigger_post_date = $q->fetch(PDO::FETCH_OBJ)->val;
+$val = $q->fetch(PDO::FETCH_OBJ)->val;
 if(!is_null($val)){
 	$twitter->dailyCoords($val);
 	$ircBot->dailyCoords($val);
