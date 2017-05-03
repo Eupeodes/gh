@@ -44,16 +44,19 @@ class Dow{
 			if(\model\Date::nextCheck($date, 0) <= 0){
 				$dateTime = new \DateTime($date);
 				$req = $db->prepare('INSERT INTO dow VALUES (:date, :dow)');
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, true);
 				while(true){
-					$url = "http://geo.crox.net/djia/".str_replace("-", "/", $date);
-
-					$ch = curl_init();
+					$url = 'http://geo.crox.net/djia/'.str_replace('-', '/', $date);
 					curl_setopt($ch, CURLOPT_URL, $url);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-					curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, true);
 					$dow = curl_exec($ch);
-					curl_close($ch);
-					if($dow > 0){
+					if(curl_getinfo($ch, CURLINFO_HTTP_CODE) !== 200){
+						$url = 'http://carabiner.peeron.com/xkcd/map/data/'.str_replace('-', '/', $date);
+						curl_setopt($ch, CURLOPT_URL, $url);
+						$dow = curl_exec($ch);
+					}
+					if(curl_getinfo($ch, CURLINFO_HTTP_CODE) === 200){
 						$req->execute([':date'=>$date, ':dow'=>$dow]);
 						$response = true;
 						$dateTime->add(new \DateInterval('P1D'));
@@ -62,6 +65,7 @@ class Dow{
 						break;
 					}
 				}
+				curl_close($ch);
 			}
 		}
 		return $response;
