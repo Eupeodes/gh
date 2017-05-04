@@ -7,6 +7,13 @@ spl_autoload_register(
 );
 define('BASE_DIR', dirname(__FILE__));
 
+if((int)date('hi') === 123){
+	$nextYear = \model\Holiday::lastYear()+1;
+	if($nextYear < date('Y')){
+		\model\Holiday::save($nextYear);
+	}
+}
+
 $twitter = new \cron\Twitter();
 $ircBot = new \cron\IrcBot();
 
