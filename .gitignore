@@ -2,3 +2,6 @@ nbproject
 config.php
 .sass-cache
 *.css.map
+cache
+._*
+.DS_Store
