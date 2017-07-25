@@ -2,7 +2,7 @@
 
 namespace model;
 
-use \lib\Db, \PDO;
+use \DateTime, \lib\Db, \PDO;
 
 class Holiday {
 	public static function lastYear(){
