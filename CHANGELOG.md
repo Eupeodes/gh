@@ -1,5 +1,8 @@
 #Changelog
 
+## v.2.3.0 - 2017-08-03
+Upgraded OpenLayers to version 4.2.0
+
 ## v2.2.2 - 2017-04-25
 Added the option to add a new DOW to the database while still triggering the irc and twitter bot
 

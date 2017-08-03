@@ -100,30 +100,13 @@ var zoom = {
 		zoom.doZoom(zoom.value);
 	},
 	doZoom: function(value){
-		var animation = ol.animation.zoom({
-			duration: 200,
-			resolution: view.getResolution()
-		});
-		map.beforeRender(animation);
-		view.setZoom(value);
+		view.animate({zoom: value, duration:500});
 	},
 	to: function(lat,lng,lvl){
-		var animation = ol.animation.zoom({
-			duration: 200,
-			resolution: view.getResolution()
-		});
-		map.beforeRender(animation);
-		view.setZoom(lvl);
-		zoom.setCenter(ol.proj.transform([lng,lat], 'EPSG:4326', 'EPSG:3857'));
-	},
-	setCenter: function(point){
-		var size = map.getSize();
-		var sideBar = parseInt($('#controls').css('width'),10)+parseInt($('#controls').css('left'),10);
-		view.centerOn(point,size,[((size[0]-sideBar)/2)+sideBar,size[1]/2]);
+		view.animate({zoom: lvl, center: ol.proj.transform([lng,lat], 'EPSG:4326', 'EPSG:3857'), duration:500});
 	},
 	reset: function(){
-		zoom.doZoom(settings.user.zoom);
-		view.setCenter(ol.proj.transform(settings.user.center, 'EPSG:4326', 'EPSG:3857'));
+		view.animate({zoom: settings.user.zoom, center: ol.proj.transform(settings.user.center, 'EPSG:4326', 'EPSG:3857'), duration:500});
 	}
 };
 
