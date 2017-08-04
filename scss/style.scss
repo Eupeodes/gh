@@ -33,6 +33,23 @@ a {
 	z-index: 1;
 }
 
+#list {
+	background: $panel-bg;
+	ol {
+		margin: 0px;
+	}
+	&.miles {
+		.km {
+			display: none;
+		}
+	}
+	&:not(.miles){
+		.miles {
+			display: none;
+		}
+	}
+}
+
 #controlsTop, #controls {
 	background-color: $panel-bg;
 	position: fixed;

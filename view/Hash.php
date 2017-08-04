@@ -14,7 +14,7 @@ class Hash {
 	private $matches;
 	
 	public function view($url){
-		if(preg_match('/^\/hash(.php)?(?P<wk>\/wk)?\/'.\lib\RegExp::date().'(\/(?P<graticule>'.\lib\RegExp::graticule().'))?'.\lib\RegExp::ext(true).'$/i', $url, $this->matches)){
+		if(preg_match('/^\/hash(?P<wk>\/wk)?\/'.\lib\RegExp::date().'(\/(?P<graticule>'.\lib\RegExp::graticule().'))?'.\lib\RegExp::ext(true).'$/i', $url, $this->matches)){
 			$y = $this->matches['y'];
 			$m = $this->matches['m'];
 			$d = $this->matches['d'];
@@ -24,10 +24,10 @@ class Hash {
 				$this->wk = (strlen($this->matches['wk']) > 0);
 				$this->get();
 			} else {
-				\lib\Error::send(400, 'This date is not a valid date');
+				\lib\Error::send(404, 'This date is not a valid date');
 			}
 		} else {
-			\lib\Error::send(404, 'No valid url');
+			\lib\Error::send(400, 'No valid url');
 		}
 	}
 	
@@ -53,12 +53,12 @@ class Hash {
 		}
 	}
 	
-	public function getGlobal($date){
+	public function getHash($date){
 		$this->date = new \DateTime($date);
 		$this->doCalc();
 		return $this->output;
 	}
-	
+
 	private function getSingle(){
 		$this->doCalc();
 		if(is_null($this->output['west'])){

@@ -1,5 +1,8 @@
 #Changelog
 
+## v.2.4.0 - 2017-08-04
+Separated data in subdomain in preparation of new plans
+
 ## v.2.3.0 - 2017-08-03
 Upgraded OpenLayers to version 4.2.0
 

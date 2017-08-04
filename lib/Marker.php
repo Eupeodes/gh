@@ -8,7 +8,7 @@ class Marker {
 	public function __construct($data){
 		$this->data = $data;
 		$size = array_key_exists('global', $this->data) ? 'l' : 's';
-		$text = !array_key_exists('text', $this->data) || strlen($this->data['text']) > 2 ? '??' : $this->data['text'];
+		$text = !array_key_exists('text', $this->data) || strlen($this->data['text']) > 2 ? 'XX' : $this->data['text'];
 		$font = filter_input(INPUT_SERVER, 'DOCUMENT_ROOT').'/img/base/xkcd.ttf';
 		$fg = $this->hex2rgb($this->colorGiven('fg') ? $this->data['fg'] : '000');
 		$bg = $this->hex2rgb($this->colorGiven('bg') ? $this->data['bg'] : '0ff');

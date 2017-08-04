@@ -39,7 +39,7 @@ class IrcBot {
 			$time = $dateTime->format('Gi');
 			if((\model\Date::max() > date('Y-m-d') && $time == 600) || (\model\Date::max() <= date('Y-m-d') && $time == 930)){
 				$hash = new \view\Hash();
-				$data = $hash->getGlobal(date('Y-m-d'))['global'];
+				$data = $hash->getHash(date('Y-m-d'))['global'];
 				$this->sendGlobal($data, date('Y-m-d'));
 			}
 		}
