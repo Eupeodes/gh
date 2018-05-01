@@ -179,7 +179,7 @@ popover = {
 			this.lat.toFixed(8) + ', ' + this.lng.toFixed(8) + ' <button onclick="zoom.to('+this.lat+','+this.lng+', 15)">Zoom in</button><br />' +
 			'<span id="geoName"><span style="color:silver;font-style:italic">[A location name should appear here]</span></span><br/>' +
 			home.distance(this.coordinates) + '<br/>' +
-			'<button onclick="window.open(&quot;/hash/' + this.feature.get('date').split('-').join('/') + '/' + grat + '.gpx&quot;)">GPX</button> <button onclick="window.open(&quot;http://geo.crox.net/poster/'+id+'&quot;)">Poster</button> <button onclick="window.open(&quot;http://www.geocaching.com/seek/nearest.aspx?origin_lat='+this.lat+'&amp;origin_long='+this.lng+'&quot;)">Nearby geocaches</button>'
+			'<button onclick="window.open(&quot;https://data.geohashing.info/hash/' + this.feature.get('date').split('-').join('/') + '/' + grat + '.gpx&quot;)">GPX</button> <button onclick="window.open(&quot;http://geo.crox.net/poster/'+id+'&quot;)">Poster</button> <button onclick="window.open(&quot;http://www.geocaching.com/seek/nearest.aspx?origin_lat='+this.lat+'&amp;origin_long='+this.lng+'&quot;)">Nearby geocaches</button>'
 			+ '<button onclick="window.open(&quot;https://maps.google.com/?q='+this.lat+','+this.lng+'&quot;)">Google Maps</button>'
 			);
 		overlay.setPosition(this.feature.getGeometry().getCoordinates());

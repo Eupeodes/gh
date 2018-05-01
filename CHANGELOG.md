@@ -1,5 +1,8 @@
 #Changelog
 
+## v.2.4.1 - 2018-05-01
+Fix GPX link
+
 ## v.2.4.0 - 2017-08-04
 Separated data in subdomain in preparation of new plans
 
