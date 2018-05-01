@@ -47,7 +47,7 @@ class Dow{
 			$url = 'http://geo.crox.net/djia/'.str_replace('-', '/', $date);
 			curl_setopt($ch, CURLOPT_URL, $url);
 			$dow = curl_exec($ch);
-			if(curl_getinfo($ch, CURLINFO_HTTP_CODE) !== 200){
+			if(curl_getinfo($ch, CURLINFO_HTTP_CODE) !== 200 && false){
 				$url = 'http://carabiner.peeron.com/xkcd/map/data/'.str_replace('-', '/', $date);
 				curl_setopt($ch, CURLOPT_URL, $url);
 				$dow = curl_exec($ch);
