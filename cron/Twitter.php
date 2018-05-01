@@ -53,7 +53,7 @@ class Twitter {
 				$msg = 'Globalhash '.$hash['date'].': '.round($hash['global']->lat,5).', '.round($hash['global']->lng,5).', '.\model\GeoName::get($hash['global']->lat, $hash['global']->lng, $maxLength)->geoName.' https://geohashing.info/'.  str_replace('-', '', $hash['date']).'/global #geohashing';
 				copy('http://maps.googleapis.com/maps/api/staticmap?center=0,0&size=640x640&sensor=false&zoom=1&markers=color:blue%7C'.$hash['global']->lat.','.$hash['global']->lng.'&key=AIzaSyDZpNi_G0_KqacSGUWW6a76EvIZgvFNiVk&maptype=satellite', $base_dir.'/cache/global_'.str_replace('-', '', $hash['date']).'.png');
 				$this->queue($msg, $base_dir.'/cache/global_'.str_replace('-', '', $hash['date']).'.png');
-				\model\GlobalHash::save($hash['date'], $hash['global']->lat, $hash['global']->lng);
+				//\model\GlobalHash::save($hash['date'], $hash['global']->lat, $hash['global']->lng);
 			}
 			if(!is_null($hash['west'])){
 				$msg = 'Western (Non-W30) offset '.$hash['date'].': '.round($hash['west']->lat,5).', '.round($hash['west']->lng,5).' https://geohashing.info/'.  str_replace('-', '', $hash['date']).'/s #geohashing';
