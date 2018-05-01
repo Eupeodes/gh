@@ -135,8 +135,8 @@ class Wiki{
 		$str .= " http://geohashing.org/".str_replace(" ", "_", $this->title)." #geohashing";
 		$this->twitter->queue($str);
 		if($this->type != "other"){
-			$req = $this->db->prepare('INSERT INTO watchlist (title,reporter) VALUES (:title,:reporter)');
-			$req->execute([':title'=>$this->title,':reporter'=>$this->user]);
+			$req = $this->db->prepare('INSERT INTO watchlist (title, reporter) VALUES (:title, :reporter)');
+			$req->execute([':title'=>$this->title, ':reporter'=>$this->user]);
 		}
 	}
 	
