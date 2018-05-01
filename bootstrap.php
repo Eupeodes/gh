@@ -17,17 +17,19 @@ $url = strtok(filter_input(INPUT_SERVER, 'REQUEST_URI'), '?');
 define('DEBUG', is_null($data) ? false : array_key_exists('debug', $data));
 
 $pages = [
-	'map'=>['Map', 'Text', 'StaticMap', 'Statbar'],
-	'data'=>['DataList', 'Dow', 'Hash', 'MaxDate', 'GeoName']
+	'map'=>['Map', 'text'=>'Text', 'staticmap'=>'StaticMap', 'statbar'=>'Statbar', 'globals'=>'Globalmap'],
+	'data'=>['DataList', 'dow'=>'Dow', 'hash'=>'Hash', 'maxdate'=>'MaxDate', 'geoname'=>'GeoName']
 ];
 $allowed = $pages[SITE];
 $page = strtok($url, '/');
 if(strpos($page, '.') !== false){
 	$page = strtok($page, '.');
 }
-if(!in_array(ucfirst($page), $allowed)){
-	$page = $allowed[0];
+
+$page = strtolower($page);
+if(empty($page) || !array_key_exists($page, $allowed)){
+	$page = 0;
 }
-ini_set('display_errors', 'on');$class = '\\view\\'.ucfirst($page);
+$class = '\\view\\'.$allowed[$page];
 $view = new $class();
 $view->view($url);
