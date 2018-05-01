@@ -59,7 +59,8 @@ class Wiki{
 	}
 	
 	private function loop(){
-		$req = $this->db->prepare('UPDATE watchlist SET rewatch=TRUE WHERE title=:title');
+		$req = $this->db->prepare('UPDATE watchlist SET rewatch=1 WHERE title=:title');
+		//$req = $this->db->prepare('UPDATE watchlist SET rewatch=TRUE WHERE title=:title');
 		foreach($this->arr as $this->el){
 			$this->getTitle();
 			$this->getType();
@@ -134,17 +135,19 @@ class Wiki{
 		$str .= " http://geohashing.org/".str_replace(" ", "_", $this->title)." #geohashing";
 		$this->twitter->queue($str);
 		if($this->type != "other"){
-			$req = $this->db->prepare('INSERT INTO watchlist (title) VALUES (:title)');
-			$req->execute([':title'=>$this->title]);
+			$req = $this->db->prepare('INSERT INTO watchlist (title,reporter) VALUES (:title,:reporter)');
+			$req->execute([':title'=>$this->title,':reporter'=>$this->user]);
 		}
 	}
 	
 	private function watch(){
-		$req = $this->db->prepare("SELECT id, title FROM watchlist WHERE state IS NULL AND (rewatch=TRUE OR (queuedate + INTERVAL '30 seconds' < CURRENT_TIMESTAMP AND ((queuedate + INTERVAL '1 hour' < CURRENT_TIMESTAMP AND queuedate + INTERVAL '1 week' >= CURRENT_TIMESTAMP AND last_check + INTERVAL '1 hour' < CURRENT_TIMESTAMP) OR (queuedate + INTERVAL '1 week' < CURRENT_TIMESTAMP AND last_check + INTERVAL '1 day' < CURRENT_TIMESTAMP))))");
+		$req = $this->db->prepare('SELECT id, title FROM watchlist WHERE state IS NULL AND (rewatch=1 OR (TIMESTAMPDIFF(SECOND, queuedate, CURRENT_TIMESTAMP) > 30 AND ((TIMESTAMPDIFF(HOUR, queuedate, CURRENT_TIMESTAMP) > 0 AND TIMESTAMPDIFF(WEEK, queuedate, CURRENT_TIMESTAMP) <= 0 AND TIMESTAMPDIFF(HOUR, last_check, CURRENT_TIMESTAMP) > 0) OR (TIMESTAMPDIFF(WEEK, queuedate, CURRENT_TIMESTAMP) > 0 AND TIMESTAMPDIFF(DAY, last_check, CURRENT_TIMESTAMP) > 0))))');
+		//pg query: $req = $this->db->prepare("SELECT id, title FROM watchlist WHERE state IS NULL AND (rewatch=TRUE OR (queuedate + INTERVAL '30 seconds' < CURRENT_TIMESTAMP AND ((queuedate + INTERVAL '1 hour' < CURRENT_TIMESTAMP AND queuedate + INTERVAL '1 week' >= CURRENT_TIMESTAMP AND last_check + INTERVAL '1 hour' < CURRENT_TIMESTAMP) OR (queuedate + INTERVAL '1 week' < CURRENT_TIMESTAMP AND last_check + INTERVAL '1 day' < CURRENT_TIMESTAMP))))");
 		$req->execute();
 		
 		$r1 = $this->db->prepare('UPDATE watchlist SET state=:state WHERE id=:id');
-		$r2 = $this->db->prepare('UPDATE watchlist SET last_check=CURRENT_TIMESTAMP, rewatch=FALSE WHERE id=:id');
+		$r2 = $this->db->prepare('UPDATE watchlist SET last_check=CURRENT_TIMESTAMP, rewatch=0 WHERE id=:id');
+		//$r2 = $this->db->prepare('UPDATE watchlist SET last_check=CURRENT_TIMESTAMP, rewatch=FALSE WHERE id=:id');
 		while($row = $req->fetch(PDO::FETCH_OBJ)){
 			$this->title = $row->title;
 			$this->id = $row->id;
