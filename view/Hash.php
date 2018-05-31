@@ -37,13 +37,13 @@ class Hash {
 	}
 	
 	private function get(){
-		if(\lib\RegExp::partExists('graticule', $this->matches)){//if a graticule is given export data as gpx
+		if(\lib\RegExp::partExists('graticule', $this->matches)){
 			$this->graticule = $this->matches['graticule'];
 			$this->global = ($this->matches['graticule'] === 'global');
 			if(!$this->global){
 				list($this->lat,$this->lng) = \lib\RegExp::parseGraticule($this->matches);
 			}
-			$this->getGpx();
+			$this->getLocation();
 		} elseif ($this->ext === 'gpx'){
 			\lib\Error::send(400, 'Gpx only valid if graticule is specified');
 		} elseif(strlen($this->matches['wk']) === 0){
@@ -113,7 +113,7 @@ class Hash {
 		}
 	}
 	
-	private function getGpx(){
+	private function getLocation(){
 		if($this->wk){
 			\lib\Error::send(404, 'Week view for GPX is not (yet) implemented');
 		} else {
@@ -135,12 +135,14 @@ class Hash {
 				$this->lng .= substr($hashData->lng,1);
 				
 			}
-			\lib\Cache::permanent();
-			header('Content-type: text/xml');
-			header('Content-type: application/force-download;charset=utf-8');
+			switch($this->ext){
+				case 'gpx':
+					\lib\Cache::permanent();
+					header('Content-type: text/xml');
+					header('Content-type: application/force-download;charset=utf-8');
 
-			header('Content-Disposition: attachment; filename="geohash_'.$this->date->format('Y-m-d').'_'.$filename.'.gpx"');
-			echo '<?xml version="1.0"?>
+					header('Content-Disposition: attachment; filename="geohash_'.$this->date->format('Y-m-d').'_'.$filename.'.gpx"');
+					echo '<?xml version="1.0"?>
 <gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="geohashing.info">
 <metadata>
 	<name>Geohash '.$this->date->format('Y-m-d').'</name>
@@ -149,6 +151,12 @@ class Hash {
 	<name>GH '.$this->date->format('Y-m-d').' '.$this->graticule.'</name>
 </wpt>
 </gpx>';
+					break;
+				case 'json':
+				default:
+					header('Content-Type: application/json');
+					echo json_encode(['date'=>$this->date->format('Y-m-d'), 'lat'=>$this->lat, 'lng'=>$this->lng]);
+			}
 		}
 	}
 	
