@@ -51,7 +51,7 @@ class RegExp {
 				self::named('ew2', $m180.'[ew]').self::named('ns2', $m90.'[ns]').'|'.
 				self::named('ns3', '[ns]'.$m90).self::named('ew3', '[ew]'.$m180).'|'.
 				self::named('ew4', '[ew]'.$m180).self::named('ns4', '[ns]'.$m90).'|'.
-				self::named('ns5', '[-]?'.$m90).'(,| |, )'.self::named('ew5', '[-]?'.$m180).'|'.
+				self::named('ns5', '[-]?'.$m90).'(,| |%20|, |,%20|_)'.self::named('ew5', '[-]?'.$m180).'|'.
 				'global'.
 			')';
 		
