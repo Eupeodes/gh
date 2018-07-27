@@ -1,5 +1,7 @@
 var maxAccuracy = 100;
 var watchL,watchC;
+var meter2feet = 3.28084;
+var feet2mile = 5280;
 
 $(function(){
 	if ("geolocation" in navigator){
@@ -58,7 +60,7 @@ function getLocation(){
 	};
 	navigator.geolocation.getCurrentPosition(function(position){
 		loc = LatLon(position.coords.latitude, position.coords.longitude);
-		$('#accuracy').text(position.coords.accuracy + ' m');
+		$('#accuracy').text(position.coords.accuracy + ' m / ' + (position.coords.accuracy*meter2feet).toFixed(0) + ' ft');
 		accuracy = position.coords.accuracy.toFixed(0);
 		if(accuracy > maxAccuracy){
 			$('#accuracy').addClass('low');
@@ -93,11 +95,18 @@ function doWatch(){
 			$('#compass').removeClass('reached');
 			$('#status').hide();
 		}
+		var dist2 = dist*meter2feet;
 		if(dist > 9999){
 			dist = dist/1000;
 			unit = 'km';
 		}
-		$('#distance').text(dist.toFixed(2)+ ' ' + unit);
+		unit2 = 'ft'
+		if(dist2 > feet2mile){
+			dist2 = dist2/feet2mile;
+			unit2 = 'mi';
+		}
+		
+		$('#distance').text(dist.toFixed(2)+ ' ' + unit + ' / ' + dist2.toFixed(2)+' '+unit2);
 		
 	}
 	

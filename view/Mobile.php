@@ -11,6 +11,8 @@ class Mobile extends Base {
 		if(preg_match('/((\/|^)(?P<graticule>'.\lib\RegExp::graticule().')(\/|$))/i', $url, $this->matches)){
 			$graticule = $this->matches['graticule'];
 		}
+		$this->version = file_get_contents('../version');
+
 		require('../template/mobile.tpl.php');
 	}
 }

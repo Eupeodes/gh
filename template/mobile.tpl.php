@@ -14,17 +14,17 @@
 			<link rel="icon" type="image/png" href="/img/icon.png" />
 			<link rel="apple-touch-icon" type="image/png" href="/img/icon.png" />
 			<title>Geohashing.info</title>
-			<link rel="stylesheet" type="text/css" href="/css/mobile.css?<?=time()?>" />
+			<link rel="stylesheet" type="text/css" href="/css/mobile.css?v=<?=$this->version?>" />
 			<script type="text/javascript" src="/js/external/jquery.min.js"></script>
 			<script type="text/javascript" src="/js/external/compass.js"></script>
 			<script type="text/javascript" src="/js/external/gps.js"></script>
 			<script type="text/javascript">date='<?=$date?>';graticule='<?=$graticule ?? 'global'?>';</script>
-			<script type="text/javascript" src="/js/mobile.js?<?=time()?>"></script>
+			<script type="text/javascript" src="/js/mobile.js?v=<?=$this->version?>"></script>
 
 	</head>
 	<body>
-	<div id="distance">-- m</div>
-	<div id="accuracy">-- m</div>
+	<div id="distance">--</div>
+	<div id="accuracy">--</div>
 	<div id="status"></div>
 	<div id="compass"></div>
 	<div id="date"><?=$date?></div>
