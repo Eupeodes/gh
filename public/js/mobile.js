@@ -82,11 +82,6 @@ function doWatch(){
 		$('#compass').show();
 		dist = loc.distanceTo(hash);
 		unit = 'm';
-		if(dist > 9999){
-			dist = dist/1000;
-			unit = 'km';
-		}
-		$('#distance').text(dist.toFixed(2)+ ' ' + unit);
 		bearing = loc.bearingTo(hash);
 
 		if(dist < accuracy && accuracy < maxAccuracy){
@@ -98,6 +93,12 @@ function doWatch(){
 			$('#compass').removeClass('reached');
 			$('#status').hide();
 		}
+		if(dist > 9999){
+			dist = dist/1000;
+			unit = 'km';
+		}
+		$('#distance').text(dist.toFixed(2)+ ' ' + unit);
+		
 	}
 	
 }
