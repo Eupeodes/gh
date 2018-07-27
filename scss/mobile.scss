@@ -1,0 +1,163 @@
+$colorFg: black;
+$colorBg: #eee;
+$colorBorder: darken($colorBg,10);
+
+html, body {
+	margin: 0px;
+	padding: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12pt;
+}
+
+div {
+	box-sizing: border-box;
+	text-align: center;
+}
+
+#distance, #accuracy {
+	position: absolute;
+	top: 0px;
+	width: 50%;
+	height: 50px;
+	padding-top: 5px;
+	border-bottom: solid 1px $colorBorder;
+	background: $colorBg;
+}
+
+#distance::before, #accuracy::before, #date::before, #location::before {
+	display: block;
+	font-size: 70%;
+	text-transform: uppercase;
+	font-weight: bold;
+	padding-bottom: 5px;
+}
+
+#distance {
+	left: 0px;
+	&::before {
+		content: 'Distance:';
+	}
+}
+
+#accuracy {
+	right: 0px;
+	border-left: solid 1px $colorBorder;
+	&::before {
+		content: 'Accuracy:';
+	}
+	&.low {
+		color: red;
+		&::before {
+			content: 'Accuracy (insufficient):'
+		}
+	}
+}
+
+#compass, #status {
+	background: white;
+	position: absolute;
+	top: 50px;
+	bottom: 50px;
+	left: 0px;
+	right: 0px;
+}
+#compass {
+	display: none;
+	&.reached {
+		background: transparent;
+		#arrow {
+			border-bottom-width: 125px;
+			border-left-width: 35px;
+			border-right-width: 35px;
+			left: calc(50% - 35px);
+			top: calc(75% - 65px);
+			div {
+				border-bottom-width: 15px;
+				top: 111px;
+				border-left-width: 35px;
+				border-right-width: 35px;
+				left: calc(50% - 35px);
+			}
+		}
+	}
+	#arrow {
+		border-bottom: solid 250px black;
+		border-left: 75px solid transparent;
+		border-right: solid 75px transparent;
+		width: 0px;
+		height: 0px;
+		position: absolute;
+		left: calc(50% - 75px);
+		top: calc(50% - 125px);
+		div {
+			border-bottom: solid 30px white;
+			border-left: 75px transparent solid;
+			border-right: 75px transparent solid;
+			position: absolute;
+			left: calc(50% - 75px);
+			top: 221px;
+			width: 0px;
+			height: 0px;
+		}
+	}
+}
+
+#status {
+	display: none;
+}
+
+#date, #location {
+	position: absolute;
+	bottom: 0px;
+	width: 50%;
+	height: 50px;
+	padding-top: 15px;
+	border-top: solid 1px $colorBorder;
+	background: $colorBg;
+}
+
+#date {
+	padding-top: 5px;
+	&::before {
+		content: 'Date:';
+	}
+}
+
+#location {
+	border-left: solid 1px $colorBorder;
+	right: 0px;
+	padding-top: 5px;
+	&::before {
+		content: 'Graticule:';
+	}	
+}
+
+@media screen and (orientation: landscape){
+	#distance {
+		height: 25%;
+	}
+	#accuracy {
+		height: 25%;
+		top: 25%;
+		left: 0px;
+	}
+	#date {
+		height: 25%;
+		top: 50%;
+		border: none;
+	}
+	#location {
+		height: 25%;
+		top: 75%;
+		left: 0px;
+	}
+	#status, #compass {
+		top: 0px;
+		bottom: 0px;
+		left: 50%;
+		border-left: solid 1px $colorBorder;
+	}
+	#arrow {
+		left: calc(50% - 75px);
+	}
+}
