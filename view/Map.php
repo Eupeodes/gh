@@ -16,7 +16,7 @@ class Map extends Base{
 	protected $cookie = [];
 	
 	public function __construct() {
-		if(array_key_exists('disclaimer', $_COOKIE)){
+		if(array_key_exists('disclaimer', $_COOKIE) && $_COOKIE['disclaimer'] > 1533883501){
 			$this->showDisclaimer = false;
 			setcookie("disclaimer", time(), time()+30*24*60*60, '/', '', true);
 		}

@@ -131,9 +131,12 @@ class Wiki{
 					$str = $lstr;
 				}
 		}
-		$this->ircBot->send("WIKI: ".$lstr." http://geohashing.org/".str_replace(" ", "_", $this->title));
+		if($this->user !== 'Fippe' || $this->type !== 'other'){
+			$this->ircBot->send("WIKI: ".$lstr." http://geohashing.org/".str_replace(" ", "_", $this->title));
+		}
 		$str .= " http://geohashing.org/".str_replace(" ", "_", $this->title)." #geohashing";
-		$this->twitter->queue($str);
+		$tweet_status = ($this->user === 'Fippe' && $this->type === 'other') ? 9 : 2;
+		$this->twitter->queue($str, null, $tweet_status);
 		if($this->type != "other"){
 			$req = $this->db->prepare('INSERT INTO watchlist (title, reporter) VALUES (:title, :reporter)');
 			$req->execute([':title'=>$this->title, ':reporter'=>$this->user]);

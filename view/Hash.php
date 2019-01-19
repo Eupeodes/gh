@@ -14,7 +14,10 @@ class Hash {
 	private $matches;
 	
 	public function view($url){
-		if(preg_match('/^\/hash(?P<wk>\/wk)?\/'.\lib\RegExp::date().'(\/(?P<graticule>'.\lib\RegExp::graticule().'))?'.\lib\RegExp::ext(true).'$/i', $url, $this->matches)){
+		if($url === '/hash/all'){
+			$this->date = new \DateTime('1928-10-01');
+			$this->getMultiple(99999);
+		} elseif(preg_match('/^\/hash(?P<wk>\/wk)?\/'.\lib\RegExp::date().'(\/(?P<graticule>'.\lib\RegExp::graticule().'))?'.\lib\RegExp::ext(true).'$/i', $url, $this->matches)){
 			$y = $this->matches['y'];
 			$m = $this->matches['m'];
 			$d = $this->matches['d'];

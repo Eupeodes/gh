@@ -63,16 +63,18 @@ class Twitter {
 		
 	}
 
-	public function queue($msg, $img = null){
+	public function queue($msg, $img = null, $status = 2){
 		if(is_null($img)){
-			$query = 'INSERT INTO '.$this->table.' (source, status, tweet) VALUES (\'bot\', 2, :msg)';
+			$query = 'INSERT INTO '.$this->table.' (source, status, tweet) VALUES (\'bot\', :status, :msg)';
 			$req = $this->db->prepare($query);
 			$req->bindParam(':msg', $msg, PDO::PARAM_STR);
+			$req->bindParam(':status', $status, PDO::PARAM_STR);
 		} else {
-			$query = 'INSERT INTO '.$this->table.' (source, status, tweet, img) VALUES (\'bot\', 2, :msg, :img)';
+			$query = 'INSERT INTO '.$this->table.' (source, status, tweet, img) VALUES (\'bot\', :status, :msg, :img)';
 			$req = $this->db->prepare($query);
 			$req->bindParam(':msg', $msg, PDO::PARAM_STR);
 			$req->bindParam(':img', $img, PDO::PARAM_STR);
+			$req->bindParam(':status', $status, PDO::PARAM_STR);
 		}
 		$req->execute();
 	}
