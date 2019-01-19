@@ -7,7 +7,7 @@ spl_autoload_register(
 );
 define('BASE_DIR', dirname(__FILE__));
 
-if((int)date('hi') === 123 || true){
+if((int)date('hi') === 123){
 	$lastYear = \model\Holiday::lastYear();
 	if($lastYear < date('Y')+10){
 		$hm = new \model\Holiday();

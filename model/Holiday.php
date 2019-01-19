@@ -42,7 +42,7 @@ class Holiday {
 
 	public function save($year){
 		$db = Db::getInstance();
-		$req = $db->prepare('INSERT INTO dow_holidays VALUES (:date, :holiday, :year)');
+		$req = $db->prepare('INSERT INTO dow_holidays VALUES (:date, :holiday, :year, 1)');
 		foreach($this->calculate($year) as $day=>$date){
 			$req->execute([':date'=>date('Y-m-d', $date), ':holiday'=>$day, ':year'=>(int)$year]);
 		}
@@ -71,7 +71,7 @@ class Holiday {
 		];
 	}
 	
-	private function observedHoliday($date, $saturday = false){
+	private function observedHoliday($date, $saturday = true){
 		$dateStamp = strtotime($date);
 		if(date('N', $dateStamp) === '6' && $saturday){//saturday
 			$dateStamp = strtotime('-1 day', $dateStamp);
