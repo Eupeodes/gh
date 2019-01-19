@@ -5,6 +5,13 @@ namespace model;
 use \DateTime, \lib\Db, \PDO;
 
 class Holiday {
+	public static function firstYear(){
+		$db = Db::getInstance();
+		$req = $db->prepare('SELECT MIN(year) as minyear FROM dow_holidays');
+		$req->execute();
+		return $req->fetch(PDO::FETCH_ASSOC)['minyear'];
+	}
+	
 	public static function lastYear(){
 		$db = Db::getInstance();
 		$req = $db->prepare('SELECT MAX(year) as maxyear FROM dow_holidays');
@@ -21,6 +28,18 @@ class Holiday {
 		return count($req->fetchAll(PDO::FETCH_ASSOC)) > 0;
 	}
 	
+	public function getHolidays($year = null){
+		$db = Db::getInstance();
+		if($year==null){
+			$req = $db->prepare('SELECT date, holiday FROM dow_holidays ORDER BY date');
+		} else {
+			$req = $db->prepare('SELECT date, holiday FROM dow_holidays WHERE year=:year ORDER BY date');
+			$req->bindParam(':year', $year, PDO::PARAM_INT);
+		}
+		$req->execute();
+		return $req->fetchAll(PDO::FETCH_ASSOC);
+	}
+
 	public function save($year){
 		$db = Db::getInstance();
 		$req = $db->prepare('INSERT INTO dow_holidays VALUES (:date, :holiday, :year)');

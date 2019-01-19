@@ -7,10 +7,11 @@ spl_autoload_register(
 );
 define('BASE_DIR', dirname(__FILE__));
 
-if((int)date('hi') === 123){
-	$nextYear = \model\Holiday::lastYear()+1;
-	if($nextYear < date('Y')){
-		\model\Holiday::save($nextYear);
+if((int)date('hi') === 123 || true){
+	$lastYear = \model\Holiday::lastYear();
+	if($lastYear < date('Y')+10){
+		$hm = new \model\Holiday();
+		$hm->save($lastYear+1);
 	}
 }
 

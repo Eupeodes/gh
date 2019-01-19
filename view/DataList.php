@@ -55,17 +55,26 @@ class DataList {
 		$minday = substr($this->dateLimits['min'],-2);
 		$maxday = substr($this->dateLimits['max'],-2);
 			
-			
+		$firstHoliday = \model\Holiday::firstYear();			
+		$lastHoliday = \model\Holiday::lastYear();			
 		if(is_null($year)){
-			echo 'Get full archive as <a href="/dow.json">json</a> or <a href="/dow.csv">csv</a><ul>';
+			echo 'Get full dow archive as <a href="/dow.json">json</a> or <a href="/dow.csv">csv</a>.<br/>Get all dow holidays from '.$firstHoliday.' to '.$lastHoliday.' as <a href="/holiday">html</a>, <a href="/holiday.json">json</a> or <a href="/holiday.csv">csv</a>.<ul>';
+			for($i=$lastHoliday;$i>$maxyear;$i--){
+				echo '<li><strong>'.$i.':</strong> Dow holidays as <a href="/holiday/'.$i.'">html</a>, <a href="/holiday/'.$i.'.json">json</a> or <a href="/holiday/'.$i.'.csv">csv</a></li>';
+			}
 			for($i=$maxyear;$i>=$minyear;$i--){
-				echo '<li><strong>'.$i.':</strong> <a href="/'.$i.'">List months</a> | Dows as <a href="/dow/'.$i.'.json">json</a> or <a href="/dow/'.$i.'.csv">csv</a></li>';
+				echo '<li><strong>'.$i.':</strong> <a href="/'.$i.'">List months</a>'
+					. ' | Dows as <a href="/dow/'.$i.'.json">json</a> or <a href="/dow/'.$i.'.csv">csv</a>'
+					. ($i>=$firstHoliday ? ' | Dow holidays as <a href="/holiday/'.$i.'">html</a>, <a href="/holiday/'.$i.'.json">json</a> or <a href="/holiday/'.$i.'.csv">csv</a>' : '')
+					. '</li>';
 			}
 			echo '</ul>';
 		} elseif(is_null($month)){
 			$min = $year == $minyear ? $minmonth : 1;
 			$max = $year == $maxyear ? $maxmonth : 12;
-			echo '<a href="/">Back</a> | Get all openings from '.$year.' as <a href="/dow/'.$year.'.json">json</a> or <a href="/dow/'.$year.'.csv">csv</a><ul>';
+			echo '<a href="/">Back</a> | Get all openings from '.$year.' as <a href="/dow/'.$year.'.json">json</a> or <a href="/dow/'.$year.'.csv">csv</a>'
+				. ($year>=$firstHoliday ? ' | Dow holidays as <a href="/holiday/'.$year.'">html</a>, <a href="/holiday/'.$year.'.json">json</a> or <a href="/holiday/'.$year.'.csv">csv</a>' : '')
+				.'<ul>';
 			for($i=$max;$i>=$min;$i--){
 				echo '<li><strong>'.$year.'-'.str_pad($i, 2, '0', STR_PAD_LEFT).':</strong> <a href="'.$this->url.'/'.str_pad($i, 2, '0', STR_PAD_LEFT).'">List days</a> | Dows as <a href="/dow/'.$year.'/'.str_pad($i, 2, '0', STR_PAD_LEFT).'.json">json</a> or <a href="/dow/'.$year.'/'.str_pad($i, 2, '0', STR_PAD_LEFT).'.csv">csv</a></li>';
 			}

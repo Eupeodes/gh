@@ -18,7 +18,7 @@ define('DEBUG', is_null($data) ? false : array_key_exists('debug', $data));
 
 $pages = [
 	'map'=>['Map', 'text'=>'Text', 'staticmap'=>'StaticMap', 'statbar'=>'Statbar', 'globals'=>'Globalmap', 'mobile'=>'Mobile'],
-	'data'=>['DataList', 'dow'=>'Dow', 'hash'=>'Hash', 'maxdate'=>'MaxDate', 'geoname'=>'GeoName']
+	'data'=>['DataList', 'dow'=>'Dow', 'hash'=>'Hash', 'maxdate'=>'MaxDate', 'geoname'=>'GeoName', 'holiday'=>'Holiday']
 ];
 $allowed = $pages[SITE];
 $page = strtok($url, '/');
