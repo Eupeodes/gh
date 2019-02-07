@@ -4,11 +4,6 @@
  * contents:	all custom js
  */
 
-/*
- * TODO:
- * create popups like http://openlayers.org/en/v3.12.1/examples/popup.html
- */
-
 var map, view, settings, ol, xs,xt,xl, ys,yt,yl, gridLayer, gridVector, geolocation, mapLayer, markerLayers = [], content, closer, overlay, days = {0:'Su', 1:'Mo', 2:'Tu', 3:'We', 4:'Th', 5:'Fr', 6:'Sa'};
 
 function closeDisclaimer(){
@@ -137,9 +132,12 @@ var home = {
 		}
 	},
 	distance: function(location){
+		if(home.point == null){
+			return '';
+		}
 		var wgs84Sphere = new ol.Sphere(6378137);
 		var dist = wgs84Sphere.haversineDistance(home.point,location)/1000;
-		return dist.toFixed(2) + ' km / ' +(dist*0.621371).toFixed(2) + ' miles';
+		return dist.toFixed(2) + ' km / ' +(dist*0.621371).toFixed(2) + ' miles<br/>';
 	}
 };
 
