@@ -46,9 +46,19 @@
 		<script type="text/javascript" src="/js/external/jquery.nicescroll.min.js"></script>
 		<script type="text/javascript" src="/js/external/jquery.ui.touch-punch.min.js"></script>
 		<script type="text/javascript" src="/js/external/ol.js"></script>
-		
+<?php
+if(array_key_exists('debug', $_GET)){
+?>
+		<script type="text/javascript" src="/js/base.js?v=<?=time()?>"></script>
+		<script type="text/javascript" src="/js/map.min.js?v=<?=time()?>"></script>
+<?php
+} else {
+?>
 		<script type="text/javascript" src="/js/base.min.js?v=<?=$this->version?>"></script>
 		<script type="text/javascript" src="/js/map.min.js?v=<?=$this->version?>"></script>
+<?php
+}
+?>
 	</head>
 	<body>
 		<div id="greybox">
