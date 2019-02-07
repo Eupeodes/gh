@@ -90,7 +90,7 @@ class Twitter {
 		$r3 = $this->db->prepare('INSERT INTO '.$this->table.'_errors (tweet_id, error) VALUES (:id, :error)');
 		while($res = $req->fetch(PDO::FETCH_OBJ)){
 			try {
-				if(is_null($res->img)){
+				if(is_null($res->img) || !file_exists($res->img)){
 					$this->connection->send($res->tweet);
 				} else {
 					$this->connection->send($res->tweet, $res->img);
