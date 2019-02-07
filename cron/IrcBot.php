@@ -15,7 +15,7 @@ class IrcBot {
 	}
 
 	public function send($msg){
-		file_put_contents('/var/www/gh/v1/hashie/db/fileReaderOutput.db', $msg."\r\n", FILE_APPEND);
+		file_put_contents('/var/www/gh/hashie/db/fileReaderOutput.db', $msg."\r\n", FILE_APPEND);
 	}
 	
 	public function dailyCoords($date){
