@@ -3,7 +3,7 @@
 ## v2.5.1 - 2019-02-07
 Fix for display of popover when no home location available
 
-## v.2.5 - 2018-07-27
+## v.2.5.0 - 2018-07-27
 Added mobile navigation page with link in the popup balloon
 
 ## v.2.4.1 - 2018-05-01
