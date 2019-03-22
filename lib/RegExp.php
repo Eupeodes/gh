@@ -80,6 +80,6 @@ class RegExp {
 	}
 	
 	public static function mapType(){
-		return '(map|sat|hyb|ter)';
+		return '(map|sat|hyb)';
 	}
 }
