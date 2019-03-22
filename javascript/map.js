@@ -12,6 +12,9 @@
  var grid = {
 	init: function(point){
 		settings.user.grid = point;
+		if(settings.user.center = '0,0'){
+			settings.user.center = point;
+		}
 		var c = point;
 		var baseLat = Math.floor(Math.abs(c[1]));
 		var baseLng = Math.floor(Math.abs(c[0]));
@@ -101,6 +104,7 @@ var marker = {
 	curDate: null,
 	date: null,
 	get: function(force, keepPopover){
+		updateUrl();
 		force = typeof force !== 'undefined' ? force : false;
 		keepPopover = typeof keepPopover !== 'undefined' ? keepPopover : false;
 		marker.date = $('#datepicker').val();
@@ -233,6 +237,7 @@ $(window).load(function() {
 	});
 	
 	$('#datepicker').change(function(){
+		updateUrl();
 		date.change();
 	});
 	

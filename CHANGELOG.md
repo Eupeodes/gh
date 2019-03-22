@@ -1,5 +1,8 @@
 #Changelog
 
+## v2.6.0 - 2019-03-22
+Url bar updates with change of map view giving direct url to current page (like google maps).
+
 ## v2.5.1 - 2019-02-07
 Fix for display of popover when no home location available
 

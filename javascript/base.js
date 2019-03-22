@@ -6,6 +6,23 @@
 
 var map, view, settings, ol, xs,xt,xl, ys,yt,yl, gridLayer, gridVector, geolocation, mapLayer, markerLayers = [], content, closer, overlay, days = {0:'Su', 1:'Mo', 2:'Tu', 3:'We', 4:'Th', 5:'Fr', 6:'Sa'};
 
+function roundCoords(coords, decimals){
+	return coords[1].toFixed(decimals)+','+coords[0].toFixed(decimals);	
+}
+
+function updateUrl(){
+	var url = "//" + window.location.host
+		+ '/t:' + $('input[name=map]:checked').val()
+		+ '/' + $('#datepicker').val() 
+		+ '/g:' + roundCoords(settings.user.grid,1)
+		+ '/c:' + roundCoords(ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326'), 3)
+		+ '/z:' + Math.round(zoom.value);
+	if(!$('#showWeek').is(':checked')){
+		url = url + '/s';
+	}
+	window.history.replaceState({}, null, url);
+}
+
 function closeDisclaimer(){
 	var expiration_date = new Date();
 	expiration_date.setTime(expiration_date.getTime()+(30*24*60*60*1000));
@@ -60,6 +77,7 @@ var zoom = {
 	value: settings.user.zoom,
 	change: function(){
 		zoom.value = $('#inputZoomLevel').val();
+		updateUrl();
 		$('#zoomControl .slider').slider('value', zoom.value);
 		zoom.doZoom(zoom.value);
 	},
@@ -130,6 +148,7 @@ var home = {
 			zoom.to(point[1],point[0],settings.user.zoom);
 			settings.user.center = ol.proj.transform(view.getCenter(), 'EPSG:3857', 'EPSG:4326');
 		}
+		updateUrl();
 	},
 	distance: function(location){
 		if(home.point == null){
@@ -265,6 +284,7 @@ loadmap = function(){
 				this.list[this.current].setVisible(false); //hide the visible map
 				this.current = id;
 				$('#map_' + id).prop('checked', true);
+				updateUrl();
 			}
 		}
 	};
