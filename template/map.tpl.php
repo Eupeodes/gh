@@ -15,6 +15,21 @@
 		<link rel="apple-touch-icon" type="image/png" href="/img/icon.png" />
 		<title>Geohashing.info</title>
 		
+<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+	  (function() {
+			      var u="//stats.eupeodes.nl/";
+				      _paq.push(['setTrackerUrl', u+'matomo.php']);
+				      _paq.push(['setSiteId', '1']);
+					      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+					      g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+						    })();
+	</script>
+<!-- End Matomo Code -->
 		<script type="text/javascript">
 			var settings = {
 				system: {
@@ -40,25 +55,13 @@
 				}
 			};
 		</script>
-		<link rel="stylesheet" type="text/css" href="/css/style.css?v=<?=$this->version?>" />
+		<link rel="stylesheet" type="text/css" href="/css/style.min.css?v=<?=$this->version?>" />
 		<script type="text/javascript" src="/js/external/jquery.min.js"></script>
 		<script type="text/javascript" src="/js/external/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="/js/external/jquery.nicescroll.min.js"></script>
 		<script type="text/javascript" src="/js/external/jquery.ui.touch-punch.min.js"></script>
 		<script type="text/javascript" src="/js/external/ol.js"></script>
-<?php
-if(array_key_exists('debug', $_GET)){
-?>
-		<script type="text/javascript" src="/js/base.js?v=<?=time()?>"></script>
-		<script type="text/javascript" src="/js/map.min.js?v=<?=time()?>"></script>
-<?php
-} else {
-?>
-		<script type="text/javascript" src="/js/base.min.js?v=<?=$this->version?>"></script>
-		<script type="text/javascript" src="/js/map.min.js?v=<?=$this->version?>"></script>
-<?php
-}
-?>
+		<script type="text/javascript" src="/js/gh/map.min.js?v=<?=time()?>"></script>
 	</head>
 	<body>
 		<div id="greybox">
