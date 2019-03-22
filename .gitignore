@@ -5,3 +5,4 @@ config.php
 cache
 ._*
 .DS_Store
+node_modules

@@ -1,0 +1,31 @@
+{
+  "name": "geohashing",
+  "version": "2.5.1",
+  "description": "source code for geohashing.info",
+  "main": "/",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eupeodes/gh.git"
+  },
+  "author": "Marten Tacoma",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Eupeodes/gh/issues"
+  },
+  "homepage": "https://github.com/Eupeodes/gh#readme",
+  "dependencies": {
+    "gulp": "^4.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify": "^3.0.2",
+    "node-sass": "^4.11.0"
+  }
+}
