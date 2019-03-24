@@ -1,5 +1,8 @@
 #Changelog
 
+## v2.6.1 - 2019-03-24
+Make url bar updating optional
+
 ## v2.6.0 - 2019-03-22
 Url bar updates with change of map view giving direct url to current page (like google maps).
 
