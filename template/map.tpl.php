@@ -134,6 +134,14 @@
 				</div>
 			</div>
 
+			<div class="control" id="urlControl">
+				<div class="title">Direct link</div>
+				<div class="content">
+					<input type="checkbox" id="updateBar" onchange="updateUrl()" /><label for="updateBar">Update address bar with current view</label>
+					<input type="text" id="url" style="text-align:left;width:100%" />
+					<button onclick="getUrl();return false;">Copy current url to clipboard</button>
+				</div>
+			</div>
 			<div class="control" id="saveControl">
 				<div class="title">Save settings</div>
 				<div class="content">

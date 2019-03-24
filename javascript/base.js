@@ -20,7 +20,15 @@ function updateUrl(){
 	if(!$('#showWeek').is(':checked')){
 		url = url + '/s';
 	}
-	window.history.replaceState({}, null, url);
+	$('#url').val(window.location.protocol + url);
+	if($('#updateBar').is(':checked')){
+		window.history.replaceState({}, null, url);
+	}
+}
+
+function getUrl(){
+	$('#url').select();
+	document.execCommand("copy");
 }
 
 function closeDisclaimer(){
