@@ -43,7 +43,7 @@ class Map extends Base{
 
 		$this->maxDate = \model\Date::max();
 		
-		$this->version = file_get_contents('../version');
+		$this->version = json_decode(file_get_contents('../package.json'))->version;
 
 		if(!empty(filter_input_array(INPUT_GET))){
 			$this->readGet();

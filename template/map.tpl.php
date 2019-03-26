@@ -61,7 +61,7 @@
 		<script type="text/javascript" src="/js/external/jquery.nicescroll.min.js"></script>
 		<script type="text/javascript" src="/js/external/jquery.ui.touch-punch.min.js"></script>
 		<script type="text/javascript" src="/js/external/ol.js"></script>
-		<script type="text/javascript" src="/js/gh/map.min.js?v=<?=time()?>"></script>
+		<script type="text/javascript" src="/js/gh/map.min.js?v=<?=$this->version?>"></script>
 	</head>
 	<body>
 		<div id="greybox">
