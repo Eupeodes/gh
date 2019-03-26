@@ -1,4 +1,5 @@
-#Changelog
+## v2.6.2 - 2019-03-26
+Detect iOS 12.2 and give instructions how to allow Access to Motion & Direction
 
 ## v2.6.1 - 2019-03-24
 Make url bar updating optional

@@ -2,12 +2,23 @@ var maxAccuracy = 100;
 var watchL,watchC;
 var meter2feet = 3.28084;
 var feet2mile = 5280;
-
 $(function(){
 	if ("geolocation" in navigator){
+		function iOSversion() {
+			if (/iP(hone|od|ad)/.test(navigator.platform)) {
+				var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+				return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+			}
+		}
+		ver = iOSversion();
+		if(ver != undefined && ver[0]==12 && ver[1]==2){
+			msg = '<br/>Please allow Motion & Orientation Access in Settings > Safari for the compass to work';
+		} else {
+			msg = '<br/>Compass is not available on your device.<br/><br/>You can use the QR code to open this page on your mobile.<br/><img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=https://geohashing.info/mobile/'+date+'/'+graticule+'&choe=UTF-8" />';
+		}
 		functional = true;
 		Compass.noSupport(function () {
-			$('#compass').html('<br/>Compass is not available on your device.<br/><br/>You can use the QR code to open this page on your mobile.<br/><img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=https://geohashing.info/mobile/'+date+'/'+graticule+'&choe=UTF-8" />');
+			$('#compass').html(msg);
 			functional = false;
 		});
 		
