@@ -5,7 +5,7 @@ const gulp = require('gulp')
 	, sass = require('gulp-sass')
 	, bump = require('gulp-bump')
 	, fs = require('fs')
-	, insert = require('gulp-insert')
+	, inject = require('gulp-inject-string')
 ;
 function css(){
 	return gulp.src(['scss/*.scss', '!scss/[a-z]_*.scss'], {sourcemaps: true})
@@ -46,7 +46,7 @@ function changelog(){
 	changelogMsg(version);
 	var date = new Date();
 	return gulp.src('CHANGELOG.md')
-		.pipe(insert.prepend('## v'+ version + ' - ' +date.toISOString().substring(0, 10)+'\n\n\n'))
+		.pipe(inject.after('# Changelog', '\n\n## v'+ version + ' - ' +date.toISOString().substring(0, 10)+'\n\n'))
 		.pipe(gulp.dest('./'));
 };
 
