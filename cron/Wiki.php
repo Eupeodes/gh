@@ -131,11 +131,14 @@ class Wiki{
 					$str = $lstr;
 				}
 		}
-		if($this->user !== 'Fippe' || $this->type !== 'other'){
+		if(in_array($this->user, ['Fippe','FippeBot']) && $this->type !== 'other'){
+			return;
+		}
+		if($this->user !== 'FippeBot' || $this->type !== 'other'){
 			$this->ircBot->send("WIKI: ".$lstr." http://geohashing.org/".str_replace(" ", "_", $this->title));
 		}
 		$str .= " http://geohashing.org/".str_replace(" ", "_", $this->title)." #geohashing";
-		$tweet_status = ($this->user === 'Fippe' && $this->type === 'other') ? 9 : 2;
+		$tweet_status = (in_array($this->user, ['Fippe', 'FippeBot']) && $this->type === 'other') ? 9 : 2;
 		$this->twitter->queue($str, null, $tweet_status);
 		if($this->type != "other"){
 			$req = $this->db->prepare('INSERT INTO watchlist (title, reporter) VALUES (:title, :reporter)');
@@ -193,7 +196,7 @@ class Wiki{
 					//lets wait some more
 					$outcome = false;
 				}
-				if($outcome !== false){
+				if($outcome !== false && str_replace('-', '', substr($this->title, 0,10)) > date('Ymd', time()-86400*14)){
 					$str = "Expedition report ".$this->title." finished. $outcome http://geohashing.org/".str_replace(" ", "_", $this->title);
 					$this->ircBot->send('WIKI: '.$str);
 					$this->twitter->queue($str.' #geohashing');
