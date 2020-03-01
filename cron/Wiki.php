@@ -64,9 +64,10 @@ class Wiki{
 			$this->getTitle();
 			$this->getType();
 			if(strpos($this->el, '<abbr class="newpage" title="This edit created a new page">N</abbr>') !== false){
-				var_dump($this->el);
-				$this->getUser();
-				$this->post();
+				if(trim($this->title) <> ''){
+					$this->getUser();
+					$this->post();
+				}
 			} elseif (in_array($this->type, array('report', 'global'))) {
 				$req->bindParam(':title', $this->title, PDO::PARAM_STR);
 				$req->execute();
