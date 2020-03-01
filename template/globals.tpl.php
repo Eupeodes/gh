@@ -111,7 +111,7 @@
 			<div class="version">Geohashing.info <a href="#" id="openChangelog">v<?=$this->version?></a> - <?=date('Y-m-d', filemtime('../version'))?> | <a href="#" id="openDisclaimer">Disclaimer</a></div>
 		</div-->
 		<?php if(DEBUG){ ?>
-		<div id="w30warning"><div class="close">x</div>Because of <a href="http://wiki.xkcd.com/geohashing/30W_Time_Zone_Rule">the 30W rule</a> coordinates west of 30&deg; west are not yet available for <span class="date">the last date</span>. Coordinates east of 30&deg; west and the global hash are available for <span class="date">that date</span>.</div>
+		<div id="w30warning"><div class="close">x</div>Because of <a href="http://geohashing.site/geohashing/30W_Time_Zone_Rule">the 30W rule</a> coordinates west of 30&deg; west are not yet available for <span class="date">the last date</span>. Coordinates east of 30&deg; west and the global hash are available for <span class="date">that date</span>.</div>
 		<?php } ?>
 	</body>
 </html>
