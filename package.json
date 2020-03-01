@@ -1,6 +1,6 @@
 {
   "name": "geohashing",
-  "version": "2.6.2",
+  "version": "2.6.3",
   "description": "source code for geohashing.info",
   "main": "/",
   "directories": {
@@ -29,6 +29,6 @@
     "gulp-sass": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-uglify": "^3.0.2",
-    "node-sass": "^4.12.0"
+    "node-sass": "^4.13.1"
   }
 }

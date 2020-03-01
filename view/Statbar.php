@@ -14,7 +14,7 @@ class Statbar{
 		header("Cache-Control: max-age=3600"); // HTTP/1.1
 
 		if(!file_exists($file) || filemtime($file) < time()-86400){
-			$base_url = 'http://wiki.xkcd.com/geohashing/User:';
+			$base_url = 'http://geohashing.site/geohashing/User:';
 			$url = $base_url.$user;
 			$data = file_get_contents($url);
 			$success = substr_count($data, 'alt="Arrow2.png"');

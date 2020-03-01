@@ -37,8 +37,7 @@ class Wiki{
 		$req = $this->db->prepare('SELECT val FROM conf WHERE field=\'next\'');
 		$req->execute();
 		$next = $req->fetch(PDO::FETCH_OBJ)->val;
-		$url = "http://wiki.xkcd.com/wgh/index.php?title=Special:RecentChanges&namespace=0&from=$next";
-		
+		$url = "https://geohashing.site/index.php?title=Special:RecentChanges&namespace=0&from=$next";
 		$response = @file_get_contents($url);
 		if($response !== false){
 			$response = utf8_decode($response);
@@ -54,7 +53,7 @@ class Wiki{
 			$this->count = count($this->arr);
 			return true;
 		} else {
-		   return false;
+			return false;
 		}
 	}
 	
@@ -64,7 +63,8 @@ class Wiki{
 		foreach($this->arr as $this->el){
 			$this->getTitle();
 			$this->getType();
-			if(strpos($this->el, "<abbr class='newpage' title='This edit created a new page'>N</abbr>") !== false){
+			if(strpos($this->el, '<abbr class="newpage" title="This edit created a new page">N</abbr>') !== false){
+				var_dump($this->el);
 				$this->getUser();
 				$this->post();
 			} elseif (in_array($this->type, array('report', 'global'))) {
@@ -87,7 +87,7 @@ class Wiki{
 	private function getUser(){
 		$sep = "<span class=\"mw-changeslist-separator\">. .</span>";
 		$els = explode($sep, $this->el);
-		$this->user = $this->getPart($els[2], ">", "</a>");
+		$this->user = $this->getPart($els[2], "<bdi>", "</bdi>");
 		if(strpos($this->user, '>')){
 			$this->user = substr($this->user, strpos($this->user, '>')+1);
 		}
@@ -135,9 +135,9 @@ class Wiki{
 			return;
 		}
 		if($this->user !== 'FippeBot' || $this->type !== 'other'){
-			$this->ircBot->send("WIKI: ".$lstr." http://geohashing.org/".str_replace(" ", "_", $this->title));
+			$this->ircBot->send("WIKI: ".$lstr." https://geohashing.site/geohashing/".str_replace(" ", "_", $this->title));
 		}
-		$str .= " http://geohashing.org/".str_replace(" ", "_", $this->title)." #geohashing";
+		$str .= " https://geohashing.site/geohashing/".str_replace(" ", "_", $this->title)." #geohashing";
 		$tweet_status = (in_array($this->user, ['Fippe', 'FippeBot']) && $this->type === 'other') ? 9 : 2;
 		$this->twitter->queue($str, null, $tweet_status);
 		if($this->type != "other"){
@@ -166,8 +166,7 @@ class Wiki{
 	}
 	
 	private function doWatch(){
-		$url = "http://wiki.xkcd.com/geohashing/".str_replace(" ", "_", $this->title);
-		
+		$url = "http://geohashing.site/geohashing/".str_replace(" ", "_", $this->title);
 		$response = @file_get_contents($url);
 		if($response !== false){
 			if(strpos($response, "Category:New report") === false && strpos($response, "Category:Expedition planning") === false){
@@ -186,24 +185,26 @@ class Wiki{
 				} elseif(strpos($response, "Category:Not reached - Did not attempt") !== false){
 					$outcome = "Nobody tried.";
 					$this->state = "nobody tried";
-				} elseif(strpos($response, "Category:Not reached - Mother nature") !== false){
+				} elseif(strpos($response, "Category:Not reached - Mother Nature") !== false){
 					$outcome = "Conditions were too bad.";
 					$this->state = "bad conditions";
-				} elseif(strpos($response, "Category:Not reached") !== false){
+				} elseif(strpos($response, "Category:Not reached") !== false || strpos($response, "Category:Coordinates not reached") !== false){
 					$outcome = "It didn't go according to plan.";
 					$this->state = "random failure";
 				} else {
 					//lets wait some more
 					$outcome = false;
 				}
-				if($outcome !== false && str_replace('-', '', substr($this->title, 0,10)) > date('Ymd', time()-86400*14)){
-					$str = "Expedition report ".$this->title." finished. $outcome http://geohashing.org/".str_replace(" ", "_", $this->title);
-					$this->ircBot->send('WIKI: '.$str);
-					$this->twitter->queue($str.' #geohashing');
+				if($outcome !== false){
+					if(str_replace('-', '', substr($this->title, 0,10)) > date('Ymd', time()-86400*14)){
+						$str = "Expedition report ".$this->title." finished. $outcome http://geohashing.site/geohashing/".str_replace(" ", "_", $this->title);
+						$this->ircBot->send('WIKI: '.$str);
+						$this->twitter->queue($str.' #geohashing');
+					}
 					return true;
 				}
 			}
 		}
 		return false;
-	}    
+	}
 }

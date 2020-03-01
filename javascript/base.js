@@ -200,7 +200,7 @@ popover = {
 			var name = 'Geohash ' + this.feature.get('date') + ' ' + y + ' ' + x;
 			var id = this.feature.get('date') + '_' + y + '_' + x;
 		}
-		content.html('<strong>'+name+'</strong> <button onclick="window.open(&quot;http://wiki.xkcd.com/geohashing/'+id+'&quot;)">Meetup</button><br />'+
+		content.html('<strong>'+name+'</strong> <button onclick="window.open(&quot;https://geohashing.site/geohashing/'+id+'&quot;)">Meetup</button><br />'+
 			this.lat.toFixed(8) + ', ' + this.lng.toFixed(8) + ' <button onclick="zoom.to('+this.lat+','+this.lng+', 15)">Zoom in</button><br />' +
 			'<span id="geoName"><span style="color:silver;font-style:italic">[A location name should appear here]</span></span><br/>' +
 			home.distance(this.coordinates) + 
