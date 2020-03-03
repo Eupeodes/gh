@@ -132,12 +132,10 @@ class Wiki{
 					$str = $lstr;
 				}
 		}
-		if(in_array($this->user, ['Fippe','FippeBot']) && $this->type !== 'other'){
+		if(in_array($this->user, ['Fippe','FippeBot']) && $this->type == 'other'){
 			return;
 		}
-		if($this->user !== 'FippeBot' || $this->type !== 'other'){
-			$this->ircBot->send("WIKI: ".$lstr." https://geohashing.site/geohashing/".str_replace(" ", "_", $this->title));
-		}
+		$this->ircBot->send("WIKI: ".$lstr." https://geohashing.site/geohashing/".str_replace(" ", "_", $this->title));
 		$str .= " https://geohashing.site/geohashing/".str_replace(" ", "_", $this->title)." #geohashing";
 		$tweet_status = (in_array($this->user, ['Fippe', 'FippeBot']) && $this->type === 'other') ? 9 : 2;
 		$this->twitter->queue($str, null, $tweet_status);
