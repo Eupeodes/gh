@@ -201,7 +201,7 @@ popover = {
 			var id = this.feature.get('date') + '_' + y + '_' + x;
 		}
 		content.html('<strong>'+name+'</strong> <button onclick="window.open(&quot;https://geohashing.site/geohashing/'+id+'&quot;)">Meetup</button><br />'+
-			this.lat.toFixed(8) + ', ' + this.lng.toFixed(8) + ' <button onclick="zoom.to('+this.lat+','+this.lng+', 15)">Zoom in</button><br />' +
+			this.lat.toFixed(5) + ', ' + this.lng.toFixed(5) + ' <button onclick="zoom.to('+this.lat+','+this.lng+', 15)">Zoom in</button><br />' +
 			'<span id="geoName"><span style="color:silver;font-style:italic">[A location name should appear here]</span></span><br/>' +
 			home.distance(this.coordinates) + 
 			'<button onclick="window.open(&quot;https://data.geohashing.info/hash/' + this.feature.get('date').split('-').join('/') + '/' + grat + '.gpx&quot;)">GPX</button> <button onclick="window.open(&quot;http://geo.crox.net/poster/'+id+'&quot;)">Poster</button> <button onclick="window.open(&quot;http://www.geocaching.com/seek/nearest.aspx?origin_lat='+this.lat+'&amp;origin_long='+this.lng+'&quot;)">Nearby geocaches</button>'

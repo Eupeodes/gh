@@ -1,6 +1,9 @@
 # Changelog
 
-## v2.6.2 - 2020-03-01
+## v2.6.4 - 2020-03-19
+Fix decimal precision
+
+## v2.6.3 - 2020-03-01
 Commit transition from wiki.xkcd.com to geohashing.site
 
 ## v2.6.2 - 2019-03-26
