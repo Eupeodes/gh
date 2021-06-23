@@ -135,8 +135,8 @@ class Wiki{
 		if(in_array($this->user, ['Fippe','FippeBot']) && $this->type == 'other'){
 			return;
 		}
-		$this->ircBot->send("WIKI: ".$lstr." https://geohashing.site/geohashing/".str_replace(" ", "_", $this->title));
-		$str .= " https://geohashing.site/geohashing/".str_replace(" ", "_", $this->title)." #geohashing";
+		$this->ircBot->send("WIKI: ".$lstr." https://geohashing.site/geohashing/".urlencode(str_replace(" ", "_", $this->title)));
+		$str .= " https://geohashing.site/geohashing/".urlencode(str_replace(" ", "_", $this->title))." #geohashing";
 		$tweet_status = (in_array($this->user, ['Fippe', 'FippeBot']) && $this->type === 'other') ? 9 : 2;
 		$this->twitter->queue($str, null, $tweet_status);
 		if($this->type != "other"){
