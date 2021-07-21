@@ -165,7 +165,7 @@ class Wiki{
 	}
 	
 	private function doWatch(){
-		$url = "http://geohashing.site/geohashing/".str_replace(" ", "_", $this->title);
+		$url = "https://geohashing.site/geohashing/".str_replace(" ", "_", $this->title);
 		$response = @file_get_contents($url);
 		if($response !== false){
 			if(strpos($response, "Category:New report") === false && strpos($response, "Category:Expedition planning") === false){
@@ -196,7 +196,7 @@ class Wiki{
 				}
 				if($outcome !== false){
 					if(str_replace('-', '', substr($this->title, 0,10)) > date('Ymd', time()-86400*14)){
-						$str = "Expedition report ".$this->title." finished. $outcome http://geohashing.site/geohashing/".str_replace(" ", "_", $this->title);
+						$str = "Expedition report ".$this->title." finished. $outcome https://geohashing.site/geohashing/".str_replace(" ", "_", $this->title);
 						$this->ircBot->send('WIKI: '.$str);
 						$this->twitter->queue($str.' #geohashing');
 					}
