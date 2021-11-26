@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.7.0 - 2021-11-26
+- Remove defunct navigation compass
+- Add OSM link
+
 ## v2.6.4 - 2020-03-19
 Fix decimal precision
 

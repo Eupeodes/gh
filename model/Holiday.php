@@ -28,7 +28,7 @@ class Holiday {
 		return count($req->fetchAll(PDO::FETCH_ASSOC)) > 0;
 	}
 	
-	public function getHolidays($year = null){
+	public static function getHolidays($year = null){
 		$db = Db::getInstance();
 		if($year==null){
 			$req = $db->prepare('SELECT date, holiday FROM dow_holidays ORDER BY date');
