@@ -60,6 +60,8 @@ class Holiday {
 				=>strtotime('-2 days', easter_date($year)),
 			'Memorial Day'
 				=>$this->getLastBefore($year.'-06-01', 1),
+            'Juneteenth'
+                =>$this->observedHoliday($year.'-06-19'),
 			'Independence Day'
 				=>$this->observedHoliday($year.'-07-04'),
 			'Labor Day'
