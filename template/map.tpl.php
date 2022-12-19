@@ -137,7 +137,8 @@
 			</div>
 
 			<div class="control" id="twitterControl">
-				<div class="content"><a href="https://twitter.com/geohashing" title="Follow @geohashing on twitter"><img src="/img/twitter.png" />@geohashing</a></div>
+				<div class="content"><a href="https://twitter.com/geohashing" title="Follow @geohashing on twitter"><img src="/img/twitter.png" /> @geohashing</a><br/>
+				<a href="https://mapstodon.space/@geohashing" title="Follow @geohashing on Mastodon" rel="me"><img src="/img/mastodon.png" /> @geohashing@mapstodon.space</a></div>
 			</div>
 			<div class="version">Geohashing.info <a href="#" id="openChangelog">v<?=$this->version?></a> - <?=date('Y-m-d', filemtime('../package.json'))?> | <a href="#" id="openDisclaimer">Disclaimer</a></div>
 		</div>

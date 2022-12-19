@@ -3,3 +3,5 @@ cache
 ._*
 .DS_Store
 node_modules
+publicdata/dc
+publicdata/plots
