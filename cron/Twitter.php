@@ -9,6 +9,8 @@ class Twitter {
 	private $hash;
 	private $connection;
 	
+	private $mastodon;
+	
 	private $table = 'tweets';
 	
 	public $short_url_length;
@@ -20,13 +22,17 @@ class Twitter {
 				\config::$keys['twitter']['accessToken'],
 				\config::$keys['twitter']['accessTokenSecret']
 		);
-			
+		
+		$this->mastodon = new \lib\Mastodon(
+			\config::$keys['mastodon']['host'],
+			\config::$keys['mastodon']['key'],
+		);
 		$this->db = \lib\Db::getInstance();
 		$this->shortUrlLength();
 	}
 	
 	private function shortUrlLength(){
-		if(date('i') == 29){
+		if(date('i') == 29 && false){
 			$data = $this->connection->request("help/configuration.json", "GET");
 			$this->short_url_length = $data->short_url_length;
 			$req = $this->db->prepare('UPDATE conf SET val=:val WHERE field=\'short_url_length\'');
@@ -51,7 +57,8 @@ class Twitter {
 				$this->queue($msg);
 				
 				$msg = 'Globalhash '.$hash['date'].': '.round($hash['global']->lat,5).', '.round($hash['global']->lng,5).', '.\model\GeoName::get($hash['global']->lat, $hash['global']->lng, $maxLength)->geoName.' https://geohashing.info/'.  str_replace('-', '', $hash['date']).'/global #geohashing';
-				copy('http://maps.googleapis.com/maps/api/staticmap?center=0,0&size=640x640&sensor=false&zoom=1&markers=color:blue%7C'.$hash['global']->lat.','.$hash['global']->lng.'&key=AIzaSyDZpNi_G0_KqacSGUWW6a76EvIZgvFNiVk&maptype=satellite', $base_dir.'/cache/global_'.str_replace('-', '', $hash['date']).'.png');
+				// copy('http://maps.googleapis.com/maps/api/staticmap?center=0,0&size=640x640&sensor=false&zoom=1&markers=color:blue%7C'.$hash['global']->lat.','.$hash['global']->lng.'&key=AIzaSyDZpNi_G0_KqacSGUWW6a76EvIZgvFNiVk&maptype=satellite', $base_dir.'/cache/global_'.str_replace('-', '', $hash['date']).'.png');
+				copy('https://staticmap.test.eupeodes.nl/?lat='.$hash['global']->lat.'&lon='.$hash['global']->lng.'&val='.substr($hash['date'], -2).'', $base_dir.'/cache/global_'.str_replace('-', '', $hash['date']).'.png');
 				$this->queue($msg, $base_dir.'/cache/global_'.str_replace('-', '', $hash['date']).'.png');
 				//\model\GlobalHash::save($hash['date'], $hash['global']->lat, $hash['global']->lng);
 			}
@@ -92,8 +99,16 @@ class Twitter {
 			try {
 				if(is_null($res->img) || !file_exists($res->img)){
 					$this->connection->send($res->tweet);
+					$this->mastodon->post($res->tweet);
 				} else {
 					$this->connection->send($res->tweet, $res->img);
+					$this->mastodon->post(
+						$res->tweet,
+						[
+							'path' => $res->img,
+							'description' => 'Visual representation of the location in this toot'
+						]
+					);
 					unlink($res->img);
 				}
 				$r1->execute([':id'=>$res->id]);
