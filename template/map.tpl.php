@@ -36,7 +36,10 @@
 					type: '<?=$this->settings['type']?>',
 					single: <?=$this->settings['single'] ? 'true' : 'false'?>,
 					colorSet: '<?=$this->settings['colorSet']?>',
-					dayOf: '<?=$this->settings['dayOf']?>'
+					dayOf: '<?=$this->settings['dayOf']?>',
+					setHomeGrid: '<?=$this->settings['setHomeGrid']?>',
+					reSetHomeGrid: <?=$this->settings['reSetHomeGrid'] ? 'true' : 'false'?>
+					
 				}
 			};
 		</script>
@@ -89,10 +92,10 @@
 			<div class="control" id="homeControl">
 				<div class="title">Map click / redetect action</div>
 				<ul>
-					<li><input type="radio" name="setHomeGrid" value="nothing" id="setHomeGridNothing" <?=$this->settings['home'] !== '[0,0]' ? 'checked' : ''?> /><label for="setHomeGridNothing">Do nothing (click)</label></li>
-					<li><input type="radio" name="setHomeGrid" value="both" id="setHomeGridBoth" <?=$this->settings['home'] === '[0,0]' && $this->settings['home'] === $this->settings['grid'] ? 'checked' : ''?> /><label for="setHomeGridBoth">Move home and center of grid</label></li>
-					<li><input type="radio" name="setHomeGrid" value="home" id="setHomeGridHome" <?=$this->settings['home'] === '[0,0]' && $this->settings['home'] !== $this->settings['grid'] ? 'checked' : ''?> /><label for="setHomeGridHome">Only move home</label></li>
-					<li><input type="radio" name="setHomeGrid" value="grid" id="setHomeGridGrid" /><label for="setHomeGridGrid">Only move center of grid</label></li>
+					<li><input type="radio" name="setHomeGrid" value="nothing" id="setHomeGridNothing" <?=$this->settings['setHomeGrid'] == 'nothing' ? 'checked' : ''?> /><label for="setHomeGridNothing">Do nothing (click)</label></li>
+					<li><input type="radio" name="setHomeGrid" value="both" id="setHomeGridBoth" <?=$this->settings['setHomeGrid'] == 'both' ? 'checked' : ''?> /><label for="setHomeGridBoth">Move home and center of grid</label></li>
+					<li><input type="radio" name="setHomeGrid" value="home" id="setHomeGridHome" <?=$this->settings['setHomeGrid'] == 'home' ? 'checked' : ''?> /><label for="setHomeGridHome">Only move home</label></li>
+					<li><input type="radio" name="setHomeGrid" value="grid" id="setHomeGridGrid" <?=$this->settings['setHomeGrid'] == 'grid' ? 'checked' : ''?> /><label for="setHomeGridGrid">Only move center of grid</label></li>
 					<li><input type="checkbox" id="resetSetHomeGrid" <?=($this->settings['resetSetHomeGrid']) ? 'checked' : ''?> /><label for="resetSetHomeGrid">Set to 'Do Nothing' after click or redetect</label></li>
 				</ul>
 			</div>

@@ -402,6 +402,7 @@ var gcookie = {
 		settings.user.dayOf = $('#dayOfWeek').is(':checked') ? 'week' : 'month';
 		settings.user.type = $('input[name=map]:checked').val();
 		settings.user.controlsVisible = $('#controlsVisible').is(':checked');
+		settings.user.setHomeGrid = $('input[name=setHomeGrid]:checked').val();
 		settings.user.resetSetHomeGrid = $('#resetSetHomeGrid').is(':checked');
 		cookie_string = "config="+JSON.stringify(settings.user)+";secure; path=/; expires=" + expiration_date.toGMTString();
 		// Create/update the cookie:

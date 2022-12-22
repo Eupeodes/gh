@@ -34,7 +34,8 @@ class Map extends Base{
 			'dayOf'=>'month',
 			'colorSet'=>'0ff',
 			'controlsVisible'=>true,
-			'resetSetHomeGrid'=>true
+			'resetSetHomeGrid'=>true,
+			'setHomeGrid' => null
 		];
 		$cookie = filter_input(INPUT_COOKIE, 'config');
 		if(!is_null($cookie)){
@@ -56,10 +57,29 @@ class Map extends Base{
 		if($this->homeSet || $this->centerSet || $this->gridSet){
 			$this->cookie = [];
 		}
+
 		$this->setLocation('home');
 		$this->setLocation('center');
 		$this->setLocation('grid');
+
+		$this->settings['setHomeGrid'] = $this->setSetHomeGrid();
+
 		require('../template/map.tpl.php');
+	}
+
+	private function setSetHomeGrid(){
+		if(!is_null($this->settings['setHomeGrid'])){
+			return $this->settings['setHomeGrid'];
+		}
+		if($this->settings['home'] !== '[0,0]'){
+			return 'nothing';
+		} else {
+			if($this->settings['home'] == $this->settings['grid']){
+				return 'both';
+			} else {
+				return 'home';
+			}
+		}
 	}
 
 	private function parseCookie($cookie){
@@ -73,6 +93,7 @@ class Map extends Base{
 					break;
 				case 'single':
 				case 'controlsVisible':
+				case 'resetSetHomeGrid':
 					$this->settings[$key] = ($val === 'true');
 				default:
 					$this->settings[$key] = $val;
