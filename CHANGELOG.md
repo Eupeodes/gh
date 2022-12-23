@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.8.0 - 2022-12-23
+Add Map click / redetect action to cookie
+
 ## v2.7.0 - 2021-11-26
 - Remove defunct navigation compass
 - Add OSM link
