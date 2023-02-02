@@ -72,13 +72,13 @@ class Push {
 
 	public function queue($msg, $img = null, $status = 2){
 		if(is_null($img)){
-			$query = 'INSERT INTO '.$this->table.' (source, status_twitter, status_mastodon, tweet) VALUES (\'bot\', :status_twitter, :status_mastodon, :msg)';
+			$query = 'INSERT INTO '.$this->table.' (source, status_twitter, status_mastodon, message) VALUES (\'bot\', :status_twitter, :status_mastodon, :msg)';
 			$req = $this->db->prepare($query);
 			$req->bindParam(':msg', $msg, PDO::PARAM_STR);
 			$req->bindParam(':status_twitter', $status, PDO::PARAM_STR);
 			$req->bindParam(':status_mastodon', $status, PDO::PARAM_STR);
 		} else {
-			$query = 'INSERT INTO '.$this->table.' (source, status_twitter, status_mastodon, tweet, img, status_img) VALUES (\'bot\', :status_twitter, :msg, :img, 1)';
+			$query = 'INSERT INTO '.$this->table.' (source, status_twitter, status_mastodon, message, img, status_img) VALUES (\'bot\', :status_twitter, :msg, :img, 1)';
 			$req = $this->db->prepare($query);
 			$req->bindParam(':msg', $msg, PDO::PARAM_STR);
 			$req->bindParam(':img', $img, PDO::PARAM_STR);
@@ -106,9 +106,9 @@ class Push {
 		while($res = $req->fetch(PDO::FETCH_OBJ)){
 			try {
 				if(is_null($res->img) || !file_exists($res->img)){
-					$this->twitter->send($res->tweet);
+					$this->twitter->send($res->message);
 				} else {
-					$this->twitter->send($res->tweet, $res->img);
+					$this->twitter->send($res->message, $res->img);
 				}
 				$r1->execute([':id'=>$res->id]);
 			} catch (\TwitterException $t){
@@ -129,10 +129,10 @@ class Push {
 		while($res = $req->fetch(PDO::FETCH_OBJ)){
 			try {
 				if(is_null($res->img) || !file_exists($res->img)){
-					$this->mastodon->post($res->tweet);
+					$this->mastodon->post($res->message);
 				} else {
 					$this->mastodon->post(
-						$res->tweet,
+						$res->message,
 						[
 							'path' => $res->img,
 							'description' => 'Visual representation of the location in this toot'
