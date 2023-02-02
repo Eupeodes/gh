@@ -15,7 +15,7 @@ if((int)date('hi') === 123){
 	}
 }
 
-$twitter = new \cron\Twitter();
+$push = new \cron\Push();
 $ircBot = new \cron\IrcBot();
 
 $ircBot->cron();
@@ -26,7 +26,7 @@ $q = $db->prepare('SELECT val FROM conf WHERE field=\'trigger_post_date\'');
 $q->execute();
 $val = $q->fetch(PDO::FETCH_OBJ)->val;
 if(!is_null($val)){
-	$twitter->dailyCoords($val);
+	$push->dailyCoords($val);
 	$ircBot->dailyCoords($val);
 	$db->prepare('UPDATE conf SET val=null WHERE field=\'trigger_post_date\'')->execute();
 }
@@ -34,11 +34,11 @@ if(!is_null($val)){
 //do all the daily stuff if new dow is available
 $dowDate = \model\Date::max();
 if(\model\Dow::getNew()){
-	$twitter->dailyCoords($dowDate);
+	$push->dailyCoords($dowDate);
 	$ircBot->dailyCoords($dowDate);
 }
 
 $wiki = new \cron\Wiki();
 $wiki->cron();
 
-$twitter->sendQueue();
+$push->sendQueue();

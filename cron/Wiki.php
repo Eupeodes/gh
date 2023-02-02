@@ -16,12 +16,12 @@ class Wiki{
 	private $count;
 	private $len;
 	
-	private $twitter;
+	private $push;
 	private $ircBot;
 	
 	public function __construct(){
 		$this->db = \lib\Db::getInstance();
-		$this->twitter = new \cron\Twitter();
+		$this->push = new \cron\Push();
 		$this->ircBot = new \cron\IrcBot();
 	}
 	
@@ -126,7 +126,7 @@ class Wiki{
 			default:
 				$lstr = $this->user." created a new page on the wiki with title ".$this->title.".";
 				$this->len = strlen($lstr);
-				if($this->len > 140-$this->twitter->short_url_length){
+				if($this->len > 140-$this->push->short_url_length){
 					$str = $this->user." made a new page on the wiki with title ".substr($this->title, 0, strlen($this->title)-($this->len-140)-2)."...";
 				} else {
 					$str = $lstr;
@@ -138,7 +138,7 @@ class Wiki{
 		$this->ircBot->send("WIKI: ".$lstr." https://geohashing.site/geohashing/".urlencode(str_replace(" ", "_", $this->title)));
 		$str .= " https://geohashing.site/geohashing/".urlencode(str_replace(" ", "_", $this->title))." #geohashing";
 		$tweet_status = (in_array($this->user, ['Fippe', 'FippeBot']) && $this->type === 'other') ? 9 : 2;
-		$this->twitter->queue($str, null, $tweet_status);
+		$this->push->queue($str, null, $tweet_status);
 		if($this->type != "other"){
 			$req = $this->db->prepare('INSERT INTO watchlist (title, reporter) VALUES (:title, :reporter)');
 			$req->execute([':title'=>$this->title, ':reporter'=>$this->user]);
@@ -198,7 +198,7 @@ class Wiki{
 					if(str_replace('-', '', substr($this->title, 0,10)) > date('Ymd', time()-86400*14)){
 						$str = "Expedition report ".$this->title." finished. $outcome https://geohashing.site/geohashing/".str_replace(" ", "_", $this->title);
 						$this->ircBot->send('WIKI: '.$str);
-						$this->twitter->queue($str.' #geohashing');
+						$this->push->queue($str.' #geohashing');
 					}
 					return true;
 				}

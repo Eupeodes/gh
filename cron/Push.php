@@ -4,19 +4,19 @@ namespace cron;
 
 use \PDO;
 
-class Twitter {
+class Push {
 	private $db;
 	private $hash;
-	private $connection;
+	private $twitter;
 	
 	private $mastodon;
 	
-	private $table = 'tweets';
+	private $table = 'push';
 	
 	public $short_url_length;
 	
 	public function __construct() {
-		$this->connection = new \lib\external\Twitter(
+		$this->twitter = new \lib\external\Twitter(
 				\config::$keys['twitter']['consumerKey'],
 				\config::$keys['twitter']['consumerSecret'],
 				\config::$keys['twitter']['accessToken'],
@@ -33,7 +33,7 @@ class Twitter {
 	
 	private function shortUrlLength(){
 		if(date('i') == 29 && false){
-			$data = $this->connection->request("help/configuration.json", "GET");
+			$data = $this->twitter->request("help/configuration.json", "GET");
 			$this->short_url_length = $data->short_url_length;
 			$req = $this->db->prepare('UPDATE conf SET val=:val WHERE field=\'short_url_length\'');
 			$req->bindParam(':val', $this->short_url_length, PDO::PARAM_INT);
@@ -72,44 +72,43 @@ class Twitter {
 
 	public function queue($msg, $img = null, $status = 2){
 		if(is_null($img)){
-			$query = 'INSERT INTO '.$this->table.' (source, status, tweet) VALUES (\'bot\', :status, :msg)';
+			$query = 'INSERT INTO '.$this->table.' (source, status_twitter, status_mastodon, tweet) VALUES (\'bot\', :status_twitter, :status_mastodon, :msg)';
 			$req = $this->db->prepare($query);
 			$req->bindParam(':msg', $msg, PDO::PARAM_STR);
-			$req->bindParam(':status', $status, PDO::PARAM_STR);
+			$req->bindParam(':status_twitter', $status, PDO::PARAM_STR);
+			$req->bindParam(':status_mastodon', $status, PDO::PARAM_STR);
 		} else {
-			$query = 'INSERT INTO '.$this->table.' (source, status, tweet, img) VALUES (\'bot\', :status, :msg, :img)';
+			$query = 'INSERT INTO '.$this->table.' (source, status_twitter, status_mastodon, tweet, img, status_img) VALUES (\'bot\', :status_twitter, :msg, :img, 1)';
 			$req = $this->db->prepare($query);
 			$req->bindParam(':msg', $msg, PDO::PARAM_STR);
 			$req->bindParam(':img', $img, PDO::PARAM_STR);
-			$req->bindParam(':status', $status, PDO::PARAM_STR);
+			$req->bindParam(':status_twitter', $status, PDO::PARAM_STR);
+			$req->bindParam(':status_mastodon', $status, PDO::PARAM_STR);
 		}
 		$req->execute();
 	}
 	
 	public function sendQueue(){
-		$query = 'SELECT * FROM '.$this->table.' WHERE status=2 ORDER BY queuedate,id';
+		$this->sendQueueMastodon();
+		$this->sendQueueTwitter();
+		$this->cleanup();
+	}
+	
+	public function sendQueueTwitter(){
+		$query = 'SELECT * FROM '.$this->table.' WHERE status_twitter=2 ORDER BY queuedate,id';
 		$req = $this->db->prepare($query);
 		$req->execute();
 		
 		//$r1 = $this->db->prepare('DELETE FROM '.$this->table.' WHERE id=:id');
-		$r1 = $this->db->prepare('UPDATE '.$this->table.' SET status=5 WHERE id=:id');
-		$r2 = $this->db->prepare('UPDATE '.$this->table.' SET status=4 WHERE id=:id');
+		$r1 = $this->db->prepare('UPDATE '.$this->table.' SET status_twitter=5, status_img=status_img+1 WHERE id=:id');
+		$r2 = $this->db->prepare('UPDATE '.$this->table.' SET status_twitter=4 WHERE id=:id');
 		$r3 = $this->db->prepare('INSERT INTO '.$this->table.'_errors (tweet_id, error) VALUES (:id, :error)');
 		while($res = $req->fetch(PDO::FETCH_OBJ)){
 			try {
 				if(is_null($res->img) || !file_exists($res->img)){
-					$this->connection->send($res->tweet);
-					$this->mastodon->post($res->tweet);
+					$this->twitter->send($res->tweet);
 				} else {
-					$this->connection->send($res->tweet, $res->img);
-					$this->mastodon->post(
-						$res->tweet,
-						[
-							'path' => $res->img,
-							'description' => 'Visual representation of the location in this toot'
-						]
-					);
-					unlink($res->img);
+					$this->twitter->send($res->tweet, $res->img);
 				}
 				$r1->execute([':id'=>$res->id]);
 			} catch (\TwitterException $t){
@@ -118,4 +117,46 @@ class Twitter {
 			}
 		}
 	}
+
+	public function sendQueueMastodon(){
+		$query = 'SELECT * FROM '.$this->table.' WHERE status_mastodon=2 ORDER BY queuedate,id';
+		$req = $this->db->prepare($query);
+		$req->execute();
+		
+		//$r1 = $this->db->prepare('DELETE FROM '.$this->table.' WHERE id=:id');
+		$r1 = $this->db->prepare('UPDATE '.$this->table.' SET status_mastodon=5, status_img=status_img+1 WHERE id=:id');
+		$r2 = $this->db->prepare('UPDATE '.$this->table.' SET status_mastodon=4 WHERE id=:id');
+		while($res = $req->fetch(PDO::FETCH_OBJ)){
+			try {
+				if(is_null($res->img) || !file_exists($res->img)){
+					$this->mastodon->post($res->tweet);
+				} else {
+					$this->mastodon->post(
+						$res->tweet,
+						[
+							'path' => $res->img,
+							'description' => 'Visual representation of the location in this toot'
+						]
+					);
+				}
+				$r1->execute([':id'=>$res->id]);
+			} catch (\TwitterException $t){
+				$r2->execute([':id'=>$res->id]);
+			}
+		}
+	}
+	
+	
+	public function cleanup(){
+		$query = 'SELECT * FROM '.$this->table.' WHERE status_img=3';
+		$req = $this->db->prepare($query);
+		$req->execute();
+		
+		$r = $this->db->prepare('UPDATE '.$this->table.' SET status_img=4 WHERE id=:id');
+		while($res = $req->fetch(PDO::FETCH_OBJ)){
+			unlink($res->img);
+			$r->execute([':id'=>$res->id]);
+		}
+	}
+
 }
