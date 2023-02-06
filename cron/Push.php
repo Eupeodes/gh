@@ -78,7 +78,7 @@ class Push {
 			$req->bindParam(':status_twitter', $status, PDO::PARAM_STR);
 			$req->bindParam(':status_mastodon', $status, PDO::PARAM_STR);
 		} else {
-			$query = 'INSERT INTO '.$this->table.' (source, status_twitter, status_mastodon, message, img, status_img) VALUES (\'bot\', :status_twitter, :msg, :img, 1)';
+			$query = 'INSERT INTO '.$this->table.' (source, status_twitter, status_mastodon, message, img, status_img) VALUES (\'bot\', :status_twitter, :status_mastodon, :msg, :img, 1)';
 			$req = $this->db->prepare($query);
 			$req->bindParam(':msg', $msg, PDO::PARAM_STR);
 			$req->bindParam(':img', $img, PDO::PARAM_STR);
