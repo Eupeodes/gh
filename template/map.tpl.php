@@ -38,7 +38,7 @@
 					colorSet: '<?=$this->settings['colorSet']?>',
 					dayOf: '<?=$this->settings['dayOf']?>',
 					setHomeGrid: '<?=$this->settings['setHomeGrid']?>',
-					reSetHomeGrid: <?=$this->settings['reSetHomeGrid'] ? 'true' : 'false'?>
+					resetSetHomeGrid: <?=$this->settings['resetSetHomeGrid'] ? 'true' : 'false'?>
 					
 				}
 			};
