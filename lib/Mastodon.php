@@ -12,7 +12,10 @@ class Mastodon {
 	public function post($message, $image = null) {
 		$url = 'https://'.$this->host.'/api/v1/statuses';
 
-		$fields = ['status' => $message];
+		$fields = [
+			'status' => $message,
+			'visibility' => (is_null($image) ? 'unlisted' : 'public')
+		];
 		if(!is_null($image)){
 			$fields['media_ids'] = [$this->postImage($image)];
 		}
@@ -54,7 +57,6 @@ class Mastodon {
     		"Content-Length: " . strlen($post_data)
 		];
 		$return = $this->curl($url, $post_data, $headers);
-		var_dump($return['response']);
 		if(in_array($return['info']['http_code'], [200, 202])){
 			return $return['response']->id;
 		} else {
