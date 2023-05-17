@@ -1,6 +1,6 @@
 {
   "name": "geohashing",
-  "version": "2.8.0",
+  "version": "2.9.0",
   "description": "source code for geohashing.info",
   "main": "/",
   "directories": {

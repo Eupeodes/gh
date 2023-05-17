@@ -206,6 +206,7 @@ popover = {
 			home.distance(this.coordinates) + 
 			'<button onclick="window.open(&quot;https://data.geohashing.info/hash/' + this.feature.get('date').split('-').join('/') + '/' + grat + '.gpx&quot;)">GPX</button> <button onclick="window.open(&quot;http://geo.crox.net/poster/'+id+'&quot;)">Poster</button> <button onclick="window.open(&quot;http://www.geocaching.com/seek/nearest.aspx?origin_lat='+this.lat+'&amp;origin_long='+this.lng+'&quot;)">Nearby geocaches</button>'
 			+ '<button onclick="window.open(&quot;https://maps.google.com/?q='+this.lat+','+this.lng+'&quot;)">Google Maps</button>'
+			+ ' <button onclick="window.open(&quot;https://www.bing.com/maps/?rtp=~pos.'+this.lat+'_'+this.lng+'_'+name.replace(' ', '+')+'&quot;)">Bing Maps</button>'
 			+ ' <button onclick="window.open(&quot;http://www.openstreetmap.org/index.html?mlat='+this.lat+'&mlon='+this.lng+'&quot;)">OSM</button>'
 			//+ ' <button onclick="window.open(&quot;https://geohashing.info/mobile/' + this.feature.get('date').split('-').join('/') + '/' + grat + '&quot;)">Navigation compass</button> '
 			);

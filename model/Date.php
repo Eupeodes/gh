@@ -29,6 +29,7 @@ class Date{
 	public static function nextCheck($maxDate, $min = 60){
 		$next = new \DateTime($maxDate.' 9:30', new \DateTimeZone('America/New_York'));
 		$diff = $next->getTimestamp()-time()+10;
-		return $diff < $min ? $min : $diff;
+		//return $diff < $min ? $min : $diff;
+        return empty($min) ? $diff : max($diff, $min);
 	}
 }

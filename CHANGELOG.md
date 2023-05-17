@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.9.0 - 2023-05-17
+Add bing maps link
+
 ## v2.8.0 - 2022-12-23
 Add Map click / redetect action to cookie
 
