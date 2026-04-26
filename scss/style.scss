@@ -150,13 +150,13 @@ a {
 			padding: 5px;
 			border-top: $border2;
 			display: block;
-			cursor: pointer;
 		}
 		input[type=radio], input[type=checkbox]{
 			display: none;
 		}
 		input+label{
 			cursor: pointer;
+			display: block;
 		}
 		input[type=radio]+label{
 			background: url('/img/radio.png') left center no-repeat;
