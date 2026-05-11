@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.10.0 - 2026-05-11
+Make full buttons clickable
+
 ## v2.9.0 - 2023-05-17
 Add bing maps link
 
