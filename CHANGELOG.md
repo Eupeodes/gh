@@ -1,5 +1,8 @@
 # Changelog
 
+## v2.10.1 - 2026-05-11
+Remove BING maps
+
 ## v2.10.0 - 2026-05-11
 Make full buttons clickable
 

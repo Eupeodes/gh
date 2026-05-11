@@ -266,20 +266,20 @@ loadmap = function(){
 			source: new ol.source.OSM(),
 			name: 'OpenStreetMap'
 		},
-		'hyb': {
-			source : new ol.source.BingMaps({
-				key: settings.system.bingKey,
-				imagerySet: 'AerialWithLabels'
-			}),
-			name: 'Bing maps (Hybrid)'
-		},
-		'sat': {
-			source : new ol.source.BingMaps({
-				key: settings.system.bingKey,
-				imagerySet: 'Aerial'
-			}),
-			name: 'Bing maps (Satellite)'
-		}
+		// 'hyb': {
+		// 	source : new ol.source.BingMaps({
+		// 		key: settings.system.bingKey,
+		// 		imagerySet: 'AerialWithLabels'
+		// 	}),
+		// 	name: 'Bing maps (Hybrid)'
+		// },
+		// 'sat': {
+		// 	source : new ol.source.BingMaps({
+		// 		key: settings.system.bingKey,
+		// 		imagerySet: 'Aerial'
+		// 	}),
+		// 	name: 'Bing maps (Satellite)'
+		// }
 	};
 	mapLayer = {
 		list: {},
