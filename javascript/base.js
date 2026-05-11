@@ -286,7 +286,7 @@ loadmap = function(){
 		current: settings.user.type,
 		register: function(id, layer, name) {
 			this.list[id] = layer;
-			addLiAlpha('#mapControl', '<li onclick="javascript:mapLayer.load(\'' + id + '\')"><input type="radio" name="map" value="' + id + '" onchange="javascript:mapLayer.load(\'' + id + '\')" id="map_' + id + '" ' + ((this.current === id) ? 'checked="checked"' : '') + '/> <label for="map_' + id + '">' + name + '</label></li>');
+			addLiAlpha('#mapControl', '<li><input type="radio" name="map" value="' + id + '" onchange="javascript:mapLayer.load(\'' + id + '\')" id="map_' + id + '" ' + ((this.current === id) ? 'checked="checked"' : '') + '/> <label for="map_' + id + '">' + name + '</label></li>');
 		},
 		load: function(id) {
 			if (id !== this.current) {

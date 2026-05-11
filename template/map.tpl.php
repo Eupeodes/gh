@@ -133,7 +133,7 @@
 			<div class="control" id="saveControl">
 				<div class="title">Save settings</div>
 				<div class="content">
-					<input type="checkbox" id="controlsVisible" <?=$this->settings['controlsVisible'] ? 'checked' : ''?>/><label for="controlsVisible">Show controls by default</label><br/>
+					<input type="checkbox" id="controlsVisible" <?=$this->settings['controlsVisible'] ? 'checked' : ''?>/><label for="controlsVisible">Show controls by default</label>
 					<button onclick="gcookie.set();return false;">Save my settings in a cookie</button> <button onclick="gcookie.unset();return false;">Delete cookie</button>
 					<button onclick="greybox.open('settings');return false;" style="margin-top:3px;">View settings</button>
 				</div>
