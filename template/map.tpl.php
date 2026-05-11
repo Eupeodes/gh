@@ -78,7 +78,7 @@
 				<div class="content"><input type="checkbox" id="showWeek" <?=($this->settings['single']) ? '' : 'checked'?> /><label for="showWeek"> Show up to 6 following days</label></div>
 			</div>
 			<div class="control" id="mapControl">
-				<div class="title">Map (only OSM works)</div>
+				<div class="title">Map</div>
 				<ul></ul>
 			</div>
 			<div class="control" id="zoomControl">
